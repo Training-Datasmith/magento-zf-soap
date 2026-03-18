@@ -25,7 +25,7 @@ abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategyInterfa
     /**
      * Set the WSDL Context object this strategy resides in.
      */
-    public function setContext(Wsdl $context)
+    public function setContext(Wsdl $context): void
     {
         $this->context = $context;
     }
@@ -57,10 +57,8 @@ abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategyInterfa
 
     /**
      * Sets the strategy for generating complex type documentation
-     *
-     * @return void
      */
-    public function setDocumentationStrategy(DocumentationStrategyInterface $documentationStrategy)
+    public function setDocumentationStrategy(DocumentationStrategyInterface $documentationStrategy): void
     {
         $this->documentationStrategy = $documentationStrategy;
     }

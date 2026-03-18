@@ -24,9 +24,8 @@ class Common extends SoapClient
      *
      * @param callable $doRequestCallback
      * @param string $wsdl
-     * @param array $options
      */
-    public function __construct($doRequestCallback, $wsdl, $options)
+    public function __construct($doRequestCallback, $wsdl, array $options)
     {
         if (! is_callable($doRequestCallback)) {
             throw new InvalidArgumentException('$doRequestCallback argument must be callable');
@@ -40,8 +39,6 @@ class Common extends SoapClient
      * Performs SOAP request over HTTP.
      * Overridden to implement different transport layers, perform additional
      * XML processing or other purpose.
-     *
-     * @return mixed
      */
     #[ReturnTypeWillChange]
     public function __doRequest(
@@ -75,9 +72,8 @@ class Common extends SoapClient
      * @param  string   $action
      * @param  int      $version
      * @param  null|int $oneWay
-     * @return mixed
      */
-    public function parentDoRequest($request, $location, $action, $version, $oneWay = null)
+    public function parentDoRequest($request, $location, $action, $version, $oneWay = null): ?string
     {
         if ($oneWay === null) {
             return parent::__doRequest($request, $location, $action, $version);

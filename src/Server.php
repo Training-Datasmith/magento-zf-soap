@@ -258,9 +258,8 @@ class Server implements LaminasServerServer
      * Allows setting options as an associative array of option => value pairs.
      *
      * @param array|Traversable $options
-     * @return self
      */
-    public function setOptions($options)
+    public function setOptions($options): static
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
@@ -325,10 +324,8 @@ class Server implements LaminasServerServer
 
     /**
      * Return array of options suitable for using with SoapServer constructor
-     *
-     * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         $options = [];
         if (null !== $this->actor) {
@@ -378,10 +375,9 @@ class Server implements LaminasServerServer
      * Set encoding
      *
      * @param  string $encoding
-     * @return self
      * @throws InvalidArgumentException With invalid encoding argument.
      */
-    public function setEncoding($encoding)
+    public function setEncoding($encoding): static
     {
         if (! is_string($encoding)) {
             throw new InvalidArgumentException('Invalid encoding specified');
@@ -405,10 +401,9 @@ class Server implements LaminasServerServer
      * Set SOAP version
      *
      * @param  int $version One of the SOAP_1_1 or SOAP_1_2 constants
-     * @return self
      * @throws InvalidArgumentException With invalid soap version argument.
      */
-    public function setSoapVersion($version)
+    public function setSoapVersion($version): static
     {
         if (! in_array($version, [SOAP_1_1, SOAP_1_2])) {
             throw new InvalidArgumentException('Invalid soap version specified');
@@ -435,7 +430,7 @@ class Server implements LaminasServerServer
      * @return true
      * @throws InvalidArgumentException On invalid URN.
      */
-    public function validateUrn($urn)
+    public function validateUrn($urn): bool
     {
         $scheme = parse_url($urn, PHP_URL_SCHEME);
         if ($scheme === false || $scheme === null) {
@@ -451,9 +446,8 @@ class Server implements LaminasServerServer
      * Actor is the actor URI for the server.
      *
      * @param  string $actor
-     * @return self
      */
-    public function setActor($actor)
+    public function setActor($actor): static
     {
         $this->validateUrn($actor);
         $this->actor = $actor;
@@ -476,9 +470,8 @@ class Server implements LaminasServerServer
      * URI in SoapServer is actually the target namespace, not a URI; $uri must begin with 'urn:'.
      *
      * @param  string $uri
-     * @return self
      */
-    public function setUri($uri)
+    public function setUri($uri): static
     {
         $this->validateUrn($uri);
         $this->uri = $uri;
@@ -499,10 +492,9 @@ class Server implements LaminasServerServer
      * Set classmap
      *
      * @param  array $classmap
-     * @return self
      * @throws InvalidArgumentException For any invalid class in the class map.
      */
-    public function setClassmap($classmap)
+    public function setClassmap($classmap): static
     {
         if (! is_array($classmap)) {
             throw new InvalidArgumentException('Classmap must be an array');
@@ -531,10 +523,9 @@ class Server implements LaminasServerServer
      * Set typemap with xml to php type mappings with appropriate validation.
      *
      * @param  array $typeMap
-     * @return self
      * @throws InvalidArgumentException
      */
-    public function setTypemap($typeMap)
+    public function setTypemap($typeMap): static
     {
         if (! is_array($typeMap)) {
             throw new InvalidArgumentException('Typemap must be an array');
@@ -570,9 +561,8 @@ class Server implements LaminasServerServer
      * Set wsdl
      *
      * @param  string $wsdl  URI or path to a WSDL
-     * @return self
      */
-    public function setWSDL($wsdl)
+    public function setWSDL($wsdl): static
     {
         $this->wsdl = $wsdl;
         return $this;
@@ -592,9 +582,8 @@ class Server implements LaminasServerServer
      * Set the SOAP Feature options.
      *
      * @param  string|int $feature
-     * @return self
      */
-    public function setSoapFeatures($feature)
+    public function setSoapFeatures($feature): static
     {
         $this->features = $feature;
         return $this;
@@ -614,9 +603,8 @@ class Server implements LaminasServerServer
      * Set the SOAP WSDL Caching Options
      *
      * @param  string|int|bool $options
-     * @return self
      */
-    public function setWSDLCache($options)
+    public function setWSDLCache($options): static
     {
         $this->wsdlCache = $options;
         return $this;
@@ -636,9 +624,8 @@ class Server implements LaminasServerServer
      * Set the SOAP send_errors Option
      *
      * @param  bool $sendErrors
-     * @return self
      */
-    public function setSendErrors($sendErrors)
+    public function setSendErrors($sendErrors): static
     {
         $this->sendErrors = (bool) $sendErrors;
         return $this;
@@ -658,9 +645,8 @@ class Server implements LaminasServerServer
      * Set flag to allow DOMDocument->loadXML() to parse huge nodes
      *
      * @param  bool $parseHuge
-     * @return self
      */
-    public function setParseHuge($parseHuge)
+    public function setParseHuge($parseHuge): static
     {
         $this->parseHuge = (bool) $parseHuge;
         return $this;
@@ -682,10 +668,9 @@ class Server implements LaminasServerServer
      * @param  array|string $function Function name, array of function names to attach,
      *             or SOAP_FUNCTIONS_ALL to attach all functions
      * @param  string $namespace Ignored
-     * @return self
      * @throws InvalidArgumentException On invalid functions.
      */
-    public function addFunction($function, $namespace = '')
+    public function addFunction($function, $namespace = ''): static
     {
         // Bail early if set to SOAP_FUNCTIONS_ALL
         if ($this->functions === SOAP_FUNCTIONS_ALL) {
@@ -771,10 +756,9 @@ class Server implements LaminasServerServer
      * Accepts an instantiated object to use when handling requests.
      *
      * @param  object $object
-     * @return self
      * @throws InvalidArgumentException
      */
-    public function setObject($object)
+    public function setObject($object): static
     {
         if (! is_object($object)) {
             throw new InvalidArgumentException(sprintf(
@@ -799,10 +783,8 @@ class Server implements LaminasServerServer
      * Returns a list of all functions registered with {@link addFunction()},
      * merged with all public methods of the class set with {@link setClass()}
      * (if any).
-     *
-     * @return array
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         $functions = [];
         if (null !== $this->class) {
@@ -820,7 +802,7 @@ class Server implements LaminasServerServer
      * @param  array $definition
      * @throws RuntimeException Unimplemented.
      */
-    public function loadFunctions($definition)
+    public function loadFunctions($definition): never
     {
         throw new RuntimeException('Unimplemented method.');
     }
@@ -829,10 +811,9 @@ class Server implements LaminasServerServer
      * Set server persistence
      *
      * @param  int $mode SOAP_PERSISTENCE_SESSION or SOAP_PERSISTENCE_REQUEST constants
-     * @return self
      * @throws InvalidArgumentException
      */
-    public function setPersistence($mode)
+    public function setPersistence($mode): static
     {
         if (! in_array($mode, [SOAP_PERSISTENCE_SESSION, SOAP_PERSISTENCE_REQUEST])) {
             throw new InvalidArgumentException('Invalid persistence mode specified');
@@ -863,10 +844,9 @@ class Server implements LaminasServerServer
      * - string; if so, verifies XML
      *
      * @param DOMDocument|DOMNode|SimpleXMLElement|stdClass|string $request
-     * @return self
      * @throws InvalidArgumentException
      */
-    protected function setRequest($request)
+    protected function setRequest($request): static
     {
         $xml = null;
 
@@ -935,9 +915,8 @@ class Server implements LaminasServerServer
      * The response is always available via {@link getResponse()}.
      *
      * @param  bool $flag
-     * @return self
      */
-    public function setReturnResponse($flag = true)
+    public function setReturnResponse($flag = true): static
     {
         $this->returnResponse = (bool) $flag;
         return $this;
@@ -988,7 +967,7 @@ class Server implements LaminasServerServer
         if (! empty($this->class)) {
             $args = $this->classArgs;
             array_unshift($args, $this->class);
-            call_user_func_array([$server, 'setClass'], $args);
+            call_user_func_array($server->setClass(...), $args);
         }
 
         if (! empty($this->object)) {
@@ -1100,11 +1079,11 @@ class Server implements LaminasServerServer
      *
      * @return bool display_errors original value
      */
-    protected function initializeSoapErrorContext()
+    protected function initializeSoapErrorContext(): string|false
     {
         $displayErrorsOriginalState = ini_get('display_errors');
         ini_set('display_errors', '0');
-        set_error_handler([$this, 'handlePhpErrors'], E_USER_ERROR);
+        set_error_handler($this->handlePhpErrors(...), E_USER_ERROR);
         return $displayErrorsOriginalState;
     }
 
@@ -1113,9 +1092,8 @@ class Server implements LaminasServerServer
      * In debug mode, all exceptions are send to the client.
      *
      * @param  bool $debug
-     * @return self
      */
-    public function setDebugMode($debug)
+    public function setDebugMode($debug): static
     {
         $this->debug = $debug;
         return $this;
@@ -1125,10 +1103,9 @@ class Server implements LaminasServerServer
      * Validate and register fault exception
      *
      * @param  string|array $class Exception class or array of exception classes
-     * @return self
      * @throws InvalidArgumentException
      */
-    public function registerFaultException($class)
+    public function registerFaultException($class): static
     {
         if (is_array($class)) {
             foreach ($class as $row) {
@@ -1174,9 +1151,8 @@ class Server implements LaminasServerServer
      * Deregister a fault exception from the fault exception stack
      *
      * @param  string $class
-     * @return bool
      */
-    public function deregisterFaultException($class)
+    public function deregisterFaultException($class): bool
     {
         if (in_array($class, $this->faultExceptions, true)) {
             $index = array_search($class, $this->faultExceptions);
@@ -1220,9 +1196,8 @@ class Server implements LaminasServerServer
      *
      * @param string|Exception $fault
      * @param  string $code SOAP Fault Codes
-     * @return SoapFault
      */
-    public function fault($fault = null, $code = 'Receiver')
+    public function fault($fault = null, $code = 'Receiver'): \SoapFault
     {
         $this->caughtException = is_string($fault) ? new Exception($fault) : $fault;
 
@@ -1262,7 +1237,7 @@ class Server implements LaminasServerServer
      * @param  string $errstr
      * @throws SoapFault
      */
-    public function handlePhpErrors($errno, $errstr)
+    public function handlePhpErrors($errno, $errstr): never
     {
         throw $this->fault($errstr, 'Receiver');
     }

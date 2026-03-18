@@ -170,9 +170,8 @@ class DotNet extends SOAPClient
      * Sets the cURL client to use.
      *
      * @param  CurlClient $curlClient The cURL client.
-     * @return self
      */
-    public function setCurlClient(CurlClient $curlClient)
+    public function setCurlClient(CurlClient $curlClient): static
     {
         $this->curlClient = $curlClient;
         return $this;
@@ -248,7 +247,7 @@ class DotNet extends SOAPClient
      * @param  array $headers The headers to flatten.
      * @return string The headers string.
      */
-    protected function flattenHeaders(array $headers)
+    protected function flattenHeaders(array $headers): string
     {
         $result = '';
 

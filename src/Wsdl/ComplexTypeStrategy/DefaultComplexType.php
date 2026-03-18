@@ -82,10 +82,7 @@ class DefaultComplexType extends AbstractComplexTypeStrategy
         return $soapType;
     }
 
-    /**
-     * @return void
-     */
-    private function addPropertyDocumentation(ReflectionProperty $property, DOMElement $element)
+    private function addPropertyDocumentation(ReflectionProperty $property, DOMElement $element): void
     {
         if ($this->documentationStrategy instanceof DocumentationStrategyInterface) {
             $documentation = $this->documentationStrategy->getPropertyDocumentation($property);
@@ -95,10 +92,7 @@ class DefaultComplexType extends AbstractComplexTypeStrategy
         }
     }
 
-    /**
-     * @return void
-     */
-    private function addComplexTypeDocumentation(ReflectionClass $class, DOMElement $element)
+    private function addComplexTypeDocumentation(ReflectionClass $class, DOMElement $element): void
     {
         if ($this->documentationStrategy instanceof DocumentationStrategyInterface) {
             $documentation = $this->documentationStrategy->getComplexTypeDocumentation($class);

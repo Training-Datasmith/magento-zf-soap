@@ -31,9 +31,8 @@ final class ReflectionDocumentation implements DocumentationStrategyInterface
 
     /**
      * @param string $docComment
-     * @return string
      */
-    private function parseDocComment($docComment)
+    private function parseDocComment(string|bool $docComment): string
     {
         $documentation = [];
         foreach (explode("\n", $docComment) as $i => $line) {
@@ -41,7 +40,7 @@ final class ReflectionDocumentation implements DocumentationStrategyInterface
                 continue;
             }
 
-            $line = trim(preg_replace('/\s*\*+/', '', $line));
+            $line = trim((string) preg_replace('/\s*\*+/', '', $line));
             if (preg_match('/^(@[a-z]|\/)/i', $line)) {
                 break;
             }

@@ -73,9 +73,8 @@ class ArrayOfTypeSequence extends DefaultComplexType
      * From a nested definition with type[], get the singular xsd:type
      *
      * @param  string $type
-     * @return string
      */
-    protected function getSingularType($type)
+    protected function getSingularType($type): string
     {
         return str_replace('[]', '', $type);
     }
@@ -84,9 +83,8 @@ class ArrayOfTypeSequence extends DefaultComplexType
      * Return the array nesting level based on the type name
      *
      * @param  string $type
-     * @return int
      */
-    protected function getNestedCount($type)
+    protected function getNestedCount($type): int
     {
         return substr_count($type, '[]');
     }

@@ -17,9 +17,8 @@ class AnyType implements ComplexTypeStrategyInterface
      * Returns xsd:anyType regardless of the input.
      *
      * @param  string $type
-     * @return string
      */
-    public function addComplexType($type)
+    public function addComplexType($type): string
     {
         return Wsdl::XSD_NS . ':anyType';
     }

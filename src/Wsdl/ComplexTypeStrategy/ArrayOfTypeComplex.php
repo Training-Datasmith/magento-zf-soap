@@ -97,9 +97,8 @@ class ArrayOfTypeComplex extends DefaultComplexType
      * From a nested definition with type[], get the singular PHP Type
      *
      * @param  string $type
-     * @return string
      */
-    protected function getSingularPhpType($type)
+    protected function getSingularPhpType($type): string
     {
         return str_replace('[]', '', $type);
     }
@@ -108,9 +107,8 @@ class ArrayOfTypeComplex extends DefaultComplexType
      * Return the array nesting level based on the type name
      *
      * @param  string $type
-     * @return int
      */
-    protected function getNestedCount($type)
+    protected function getNestedCount($type): int
     {
         return substr_count($type, '[]');
     }

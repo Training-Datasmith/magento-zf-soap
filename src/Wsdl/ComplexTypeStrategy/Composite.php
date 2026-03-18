@@ -21,13 +21,6 @@ class Composite implements ComplexTypeStrategy
     protected $typeMap = [];
 
     /**
-     * Default Strategy of this composite
-     *
-     * @var string|ComplexTypeStrategy
-     */
-    protected $defaultStrategy;
-
-    /**
      * Context WSDL file that this composite serves
      *
      * @var Wsdl|null
@@ -37,18 +30,18 @@ class Composite implements ComplexTypeStrategy
     /**
      * Construct Composite WSDL Strategy.
      *
-     * @param array $typeMap
      * @param string|ComplexTypeStrategy $defaultStrategy
      */
     public function __construct(
         array $typeMap = [],
-        $defaultStrategy = DefaultComplexType::class
+        /**
+         * Default Strategy of this composite
+         */
+        protected $defaultStrategy = DefaultComplexType::class
     ) {
         foreach ($typeMap as $type => $strategy) {
             $this->connectTypeToStrategy($type, $strategy);
         }
-
-        $this->defaultStrategy = $defaultStrategy;
     }
 
     /**
@@ -56,10 +49,9 @@ class Composite implements ComplexTypeStrategy
      *
      * @param  string $type
      * @param  string|ComplexTypeStrategy $strategy
-     * @return Composite
      * @throws Exception\InvalidArgumentException
      */
-    public function connectTypeToStrategy($type, $strategy)
+    public function connectTypeToStrategy($type, $strategy): static
     {
         if (! is_string($type)) {
             throw new Exception\InvalidArgumentException('Invalid type given to Composite Type Map.');
@@ -121,10 +113,8 @@ class Composite implements ComplexTypeStrategy
 
     /**
      * Method accepts the current WSDL context file.
-     *
-     * @return Composite
      */
-    public function setContext(Wsdl $context)
+    public function setContext(Wsdl $context): static
     {
         $this->context = $context;
         return $this;

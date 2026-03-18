@@ -131,10 +131,8 @@ class AutoDiscover
 
     /**
      * Set the discovery strategy for method type and other information.
-     *
-     * @return self
      */
-    public function setDiscoveryStrategy(DiscoveryStrategy $discoveryStrategy)
+    public function setDiscoveryStrategy(DiscoveryStrategy $discoveryStrategy): static
     {
         $this->discoveryStrategy = $discoveryStrategy;
         return $this;
@@ -164,16 +162,15 @@ class AutoDiscover
      * Set the class map of php to wsdl mappings.
      *
      * @param  array $classMap
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setClassMap($classMap)
+    public function setClassMap($classMap): static
     {
         if (! is_array($classMap)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects an array; received "%s"',
                 __METHOD__,
-                is_object($classMap) ? get_class($classMap) : gettype($classMap)
+                get_debug_type($classMap)
             ));
         }
 
@@ -185,10 +182,9 @@ class AutoDiscover
      * Set service name
      *
      * @param string $serviceName
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setServiceName($serviceName)
+    public function setServiceName($serviceName): static
     {
         $matches = [];
 
@@ -210,24 +206,22 @@ class AutoDiscover
      */
     public function getServiceName()
     {
-        if (! $this->serviceName) {
-            if ($this->class) {
-                return $this->reflection->reflectClass($this->class)->getShortName();
-            } else {
-                throw new Exception\RuntimeException('No service name given. Call AutoDiscover::setServiceName().');
-            }
+        if ($this->serviceName) {
+            return $this->serviceName;
         }
-        return $this->serviceName;
+        if ($this->class) {
+            return $this->reflection->reflectClass($this->class)->getShortName();
+        }
+        throw new Exception\RuntimeException('No service name given. Call AutoDiscover::setServiceName().');
     }
 
     /**
      * Set the location at which the WSDL file will be available.
      *
      * @param  Uri\Uri|string $uri
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setUri($uri)
+    public function setUri($uri): static
     {
         if (! is_string($uri) && ! $uri instanceof Uri\Uri) {
             throw new Exception\InvalidArgumentException(
@@ -269,10 +263,9 @@ class AutoDiscover
      * Set the name of the WSDL handling class.
      *
      * @param  string $wsdlClass
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setWsdlClass($wsdlClass)
+    public function setWsdlClass($wsdlClass): static
     {
         if (! is_string($wsdlClass) && ! is_subclass_of($wsdlClass, Wsdl::class)) {
             throw new Exception\InvalidArgumentException(
@@ -300,11 +293,9 @@ class AutoDiscover
      * By default the options are set to 'use' => 'encoded' and
      * 'encodingStyle' => "http://schemas.xmlsoap.org/soap/encoding/".
      *
-     * @param  array $operationStyle
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setOperationBodyStyle(array $operationStyle = [])
+    public function setOperationBodyStyle(array $operationStyle = []): static
     {
         if (! isset($operationStyle['use'])) {
             throw new Exception\InvalidArgumentException('Key "use" is required in Operation soap:body style.');
@@ -317,11 +308,8 @@ class AutoDiscover
      * Set Binding soap:binding style.
      *
      * By default 'style' is 'rpc' and 'transport' is 'http://schemas.xmlsoap.org/soap/http'.
-     *
-     * @param  array $bindingStyle
-     * @return self
      */
-    public function setBindingStyle(array $bindingStyle = [])
+    public function setBindingStyle(array $bindingStyle = []): static
     {
         if (isset($bindingStyle['style'])) {
             $this->bindingStyle['style'] = $bindingStyle['style'];
@@ -334,10 +322,8 @@ class AutoDiscover
 
     /**
      * Set the strategy that handles functions and classes that are added AFTER this call.
-     *
-     * @return self
      */
-    public function setComplexTypeStrategy(ComplexTypeStrategy $strategy)
+    public function setComplexTypeStrategy(ComplexTypeStrategy $strategy): static
     {
         $this->strategy = $strategy;
         return $this;
@@ -347,9 +333,8 @@ class AutoDiscover
      * Set the Class the SOAP server will use
      *
      * @param string $class Class Name
-     * @return self
      */
-    public function setClass($class)
+    public function setClass($class): static
     {
         $this->class = $class;
         return $this;
@@ -359,10 +344,9 @@ class AutoDiscover
      * Add a Single or Multiple Functions to the WSDL
      *
      * @param  string $function Function Name
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function addFunction($function)
+    public function addFunction($function): static
     {
         if (is_array($function)) {
             foreach ($function as $row) {
@@ -411,10 +395,9 @@ class AutoDiscover
     /**
      * Generate the WSDL for a set of reflection method instances.
      *
-     * @param  array $reflectionMethods
      * @return Wsdl
      */
-    protected function generateWsdl(array $reflectionMethods)
+    protected function generateWsdl(array $reflectionMethods): object
     {
         $uri = $this->getUri();
 
@@ -452,7 +435,7 @@ class AutoDiscover
      * @param  DOMElement $binding wsdl:binding
      * @throws Exception\InvalidArgumentException
      */
-    protected function addFunctionToWsdl($function, $wsdl, $port, $binding)
+    protected function addFunctionToWsdl(\Laminas\Server\Reflection\AbstractFunction $function, $wsdl, $port, $binding)
     {
         $uri = $this->getUri();
 
@@ -593,12 +576,10 @@ class AutoDiscover
         }
 
         if ($this->class) {
-            $wsdl = $this->generateClass();
-        } else {
-            $wsdl = $this->generateFunctions();
+            return $this->generateClass();
         }
 
-        return $wsdl;
+        return $this->generateFunctions();
     }
 
     /**
@@ -627,7 +608,7 @@ class AutoDiscover
     /**
      * Handle WSDL document.
      */
-    public function handle()
+    public function handle(): void
     {
         header('Content-Type: text/xml');
         echo $this->toXml();

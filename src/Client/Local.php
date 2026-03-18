@@ -14,24 +14,18 @@ use Laminas\Soap\Server as SOAPServer;
 class Local extends SOAPClient
 {
     /**
-     * Server object
-     *
-     * @var SOAPServer
-     */
-    protected $server;
-
-    /**
      * Local client constructor
      *
      * @param string $wsdl
      * @param array $options
      */
-    public function __construct(SOAPServer $server, $wsdl, $options = null)
+    public function __construct(/**
+     * Server object
+     */
+    protected \SOAPServer $server, $wsdl, $options = null)
     {
-        $this->server = $server;
-
         // Use Server specified SOAP version as default
-        $this->setSoapVersion($server->getSoapVersion());
+        $this->setSoapVersion($this->server->getSoapVersion());
 
         parent::__construct($wsdl, $options);
     }
@@ -40,7 +34,6 @@ class Local extends SOAPClient
     /**
      * Actual "do request" method.
      *
-     * @param  Common $client
      * @param  string $request
      * @param  string $location
      * @param  string $action
@@ -55,7 +48,7 @@ class Local extends SOAPClient
         $this->server->handle($request);
         $response = ob_get_clean();
 
-        if ($response === null || $response === '') {
+        if ($response === '') {
             $serverResponse = $this->server->getResponse();
             if ($serverResponse !== null) {
                 $response = $serverResponse;

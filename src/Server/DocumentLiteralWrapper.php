@@ -75,31 +75,25 @@ use function sprintf;
  */
 class DocumentLiteralWrapper
 {
-    /** @var object */
-    protected $object;
-
-    /** @var ReflectionObject */
-    protected $reflection;
+    protected \ReflectionObject $reflection;
 
     /**
      * Pass Service object to the constructor
      *
      * @param object $object
      */
-    public function __construct($object)
+    public function __construct(protected $object)
     {
-        $this->object     = $object;
         $this->reflection = new ReflectionObject($this->object);
     }
 
     /**
      * Proxy method that does the heavy document/literal decomposing.
      *
-     * @param  string $method
      * @param  array $args
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args)
     {
         $this->assertOnlyOneArgument($args);
         $this->assertServiceDelegateHasMethod($method);
@@ -115,10 +109,9 @@ class DocumentLiteralWrapper
      *
      * @param  string $method
      * @param  object $document
-     * @return array
      * @throws Exception\UnexpectedValueException
      */
-    protected function parseArguments($method, $document)
+    protected function parseArguments($method, $document): array
     {
         $reflMethod = $this->reflection->getMethod($method);
         $params     = [];
@@ -132,7 +125,7 @@ class DocumentLiteralWrapper
                 throw new Exception\UnexpectedValueException(sprintf(
                     "Received unknown argument %s which is not an argument to %s::%s",
                     $argName,
-                    get_class($this->object),
+                    $this->object::class,
                     $method
                 ));
             }
@@ -145,11 +138,9 @@ class DocumentLiteralWrapper
     /**
      * Returns result message content
      *
-     * @param  string $method
      * @param  mixed $ret
-     * @return array
      */
-    protected function getResultMessage($method, $ret)
+    protected function getResultMessage(string $method, $ret): array
     {
         return [$method . 'Result' => $ret];
     }
@@ -164,13 +155,12 @@ class DocumentLiteralWrapper
             throw new Exception\BadMethodCallException(sprintf(
                 "Method %s does not exist on delegate object %s",
                 $method,
-                get_class($this->object)
+                $this->object::class
             ));
         }
     }
 
     /**
-     * @param  array $args
      * @throws Exception\UnexpectedValueException
      */
     protected function assertOnlyOneArgument(array $args)
