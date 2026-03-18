@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Exception;
 
 use RuntimeException as SPLRuntimeException;

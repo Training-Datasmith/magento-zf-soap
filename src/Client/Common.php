@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Client;
 
-use Laminas\Soap\Exception\InvalidArgumentException;
+use function is_callable;
+
 // phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
+use Laminas\Soap\Exception\InvalidArgumentException;
+
+use function ltrim;
+
 use ReturnTypeWillChange;
 use SoapClient;
-
-use function is_callable;
-use function ltrim;
 
 class Common extends SoapClient
 {

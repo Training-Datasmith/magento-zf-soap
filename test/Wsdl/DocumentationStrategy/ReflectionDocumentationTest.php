@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap\Wsdl\DocumentationStrategy;
 
 use Laminas\Soap\Wsdl\DocumentationStrategy\ReflectionDocumentation;

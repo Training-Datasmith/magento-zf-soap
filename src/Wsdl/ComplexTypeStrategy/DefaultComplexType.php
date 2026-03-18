@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Wsdl\ComplexTypeStrategy;
+
+use function class_exists;
 
 use DOMElement;
 use Laminas\Soap\Exception;
 use Laminas\Soap\Wsdl;
 use Laminas\Soap\Wsdl\DocumentationStrategy\DocumentationStrategyInterface;
+
+use function preg_match_all;
+
 use ReflectionClass;
 use ReflectionProperty;
 
-use function class_exists;
-use function preg_match_all;
 use function sprintf;
 use function trim;
 

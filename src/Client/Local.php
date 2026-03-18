@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Client;
 
 use Laminas\Soap\Client as SOAPClient;
-use Laminas\Soap\Server as SOAPServer;
 
 /**
  * Class is intended to be used as local SOAP client which works
@@ -22,8 +23,10 @@ class Local extends SOAPClient
     public function __construct(/**
      * Server object
      */
-    protected \SOAPServer $server, $wsdl, $options = null)
-    {
+        protected \SOAPServer $server,
+        $wsdl,
+        $options = null
+    ) {
         // Use Server specified SOAP version as default
         $this->setSoapVersion($this->server->getSoapVersion());
 

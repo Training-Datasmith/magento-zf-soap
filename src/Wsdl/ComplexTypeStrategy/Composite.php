@@ -1,14 +1,17 @@
 <?php
 
-namespace Laminas\Soap\Wsdl\ComplexTypeStrategy;
+declare(strict_types=1);
 
-use Laminas\Soap\Exception;
-use Laminas\Soap\Wsdl;
-use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTypeStrategy;
-use Laminas\Soap\Wsdl\ComplexTypeStrategy\DefaultComplexType;
+namespace Laminas\Soap\Wsdl\ComplexTypeStrategy;
 
 use function class_exists;
 use function is_string;
+
+use Laminas\Soap\Exception;
+
+use Laminas\Soap\Wsdl;
+use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTypeStrategy;
+
 use function sprintf;
 
 class Composite implements ComplexTypeStrategy

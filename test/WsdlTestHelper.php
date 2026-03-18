@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap;
 
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+
+use function in_array;
+
 use Laminas\Soap\Wsdl;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface;
-use PHPUnit\Framework\TestCase;
 
-use function in_array;
+use PHPUnit\Framework\TestCase;
 
 use const XML_ELEMENT_NODE;
 

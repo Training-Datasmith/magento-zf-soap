@@ -1,28 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap;
 
+use function count;
+
 use DOMDocument;
+
+use function file_get_contents;
+
 use Laminas\Soap\Exception\RuntimeException;
 use Laminas\Soap\Wsdl;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy\AnyType;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy\DefaultComplexType;
+
 use Laminas\Uri\Uri;
 use LaminasTest\Soap\TestAsset\WsdlTestClass;
 
-use function count;
-use function file_get_contents;
 use function libxml_disable_entity_loader;
 use function libxml_get_errors;
 use function libxml_use_internal_errors;
+
+use const LIBXML_VERSION;
+
 use function ob_get_clean;
 use function ob_start;
 use function print_r;
 use function sys_get_temp_dir;
 use function tempnam;
-use function unlink;
 
-use const LIBXML_VERSION;
+use function unlink;
 
 class WsdlTest extends WsdlTestHelper
 {
@@ -585,7 +593,7 @@ class WsdlTest extends WsdlTestHelper
         $messageParts['parameter3'] = $this->wsdl->getType('mixed');
 
         $message = $this->wsdl->addMessage('myMessage', $messageParts);
-        $this->wsdl->addDocumentation($message, "foo");
+        $this->wsdl->addDocumentation($message, 'foo');
 
         $this->documentNodesTest();
 
@@ -818,15 +826,15 @@ class WsdlTest extends WsdlTestHelper
      */
     public function testCaseOfDocBlockParamsDosNotMatterForSoapTypeDetectionLaminas3910()
     {
-        $this->assertEquals("xsd:string", $this->wsdl->getType("StrIng"));
-        $this->assertEquals("xsd:string", $this->wsdl->getType("sTr"));
-        $this->assertEquals("xsd:int", $this->wsdl->getType("iNt"));
-        $this->assertEquals("xsd:int", $this->wsdl->getType("INTEGER"));
-        $this->assertEquals("xsd:float", $this->wsdl->getType("FLOAT"));
-        $this->assertEquals("xsd:double", $this->wsdl->getType("douBLE"));
-        $this->assertEquals("xsd:date", $this->wsdl->getType("daTe"));
+        $this->assertEquals('xsd:string', $this->wsdl->getType('StrIng'));
+        $this->assertEquals('xsd:string', $this->wsdl->getType('sTr'));
+        $this->assertEquals('xsd:int', $this->wsdl->getType('iNt'));
+        $this->assertEquals('xsd:int', $this->wsdl->getType('INTEGER'));
+        $this->assertEquals('xsd:float', $this->wsdl->getType('FLOAT'));
+        $this->assertEquals('xsd:double', $this->wsdl->getType('douBLE'));
+        $this->assertEquals('xsd:date', $this->wsdl->getType('daTe'));
 
-        $this->assertEquals("xsd:long", $this->wsdl->getType("long"));
+        $this->assertEquals('xsd:long', $this->wsdl->getType('long'));
     }
 
     /**
@@ -836,18 +844,18 @@ class WsdlTest extends WsdlTestHelper
     {
         $this->wsdl->setComplexTypeStrategy(new Wsdl\ComplexTypeStrategy\ArrayOfTypeSequence());
 
-        $this->wsdl->addComplexType("string[]");
-        $this->wsdl->addComplexType("int[]");
-        $this->wsdl->addComplexType("string[]");
-        $this->wsdl->addComplexType("int[]");
+        $this->wsdl->addComplexType('string[]');
+        $this->wsdl->addComplexType('int[]');
+        $this->wsdl->addComplexType('string[]');
+        $this->wsdl->addComplexType('int[]');
 
         $this->documentNodesTest();
 
         $nodes = $this->xpath->query('//wsdl:types/xsd:schema/xsd:complexType[@name="ArrayOfString"]');
-        $this->assertEquals(1, $nodes->length, "ArrayOfString should appear only once.");
+        $this->assertEquals(1, $nodes->length, 'ArrayOfString should appear only once.');
 
         $nodes = $this->xpath->query('//wsdl:types/xsd:schema/xsd:complexType[@name="ArrayOfInt"]');
-        $this->assertEquals(1, $nodes->length, "ArrayOfInt should appear only once.");
+        $this->assertEquals(1, $nodes->length, 'ArrayOfInt should appear only once.');
     }
 
     public function testClassMap()

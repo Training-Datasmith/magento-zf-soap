@@ -1,9 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap;
+
+use function array_merge;
+use function array_shift;
 
 use DOMDocument;
 use Exception;
+
+use function extension_loaded;
+use function headers_sent;
+use function is_array;
+
 use Laminas\Config\Config;
 use Laminas\Soap\AutoDiscover;
 use Laminas\Soap\Client\Local;
@@ -13,28 +23,29 @@ use Laminas\Soap\Server;
 use LaminasTest\Soap\TestAsset\errorClass;
 use LaminasTest\Soap\TestAsset\MockServer;
 use LaminasTest\Soap\TestAsset\ServerTestClass;
+
 use LaminasTest\Soap\TestAsset\TestData1;
 use LaminasTest\Soap\TestAsset\TestData2;
-use PHPUnit\Framework\TestCase;
-use SoapFault;
-use SoapServer;
 
-use function array_merge;
-use function array_shift;
-use function extension_loaded;
-use function headers_sent;
-use function is_array;
 use function libxml_disable_entity_loader;
-use function sprintf;
-use function unlink;
 
 use const LIBXML_VERSION;
+
+use PHPUnit\Framework\TestCase;
+
 use const SOAP_1_1;
 use const SOAP_1_2;
 use const SOAP_FUNCTIONS_ALL;
+
 use const SOAP_PERSISTENCE_REQUEST;
 use const SOAP_PERSISTENCE_SESSION;
 use const SOAP_SINGLE_ELEMENT_ARRAYS;
+
+use SoapFault;
+use SoapServer;
+
+use function sprintf;
+use function unlink;
 
 class ServerTest extends TestCase
 {
@@ -821,7 +832,7 @@ class ServerTest extends TestCase
     public function testFaultWithIntegerFailureCodeDoesNotBreakClassSoapFault()
     {
         $server = new Server();
-        $fault  = $server->fault("FaultMessage!", 5000);
+        $fault  = $server->fault('FaultMessage!', 5000);
 
         $this->assertInstanceOf(SoapFault::class, $fault);
     }
@@ -878,7 +889,7 @@ class ServerTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unimplemented method');
-        $server->loadFunctions("bogus");
+        $server->loadFunctions('bogus');
     }
 
     public function testErrorHandlingOfSoapServerChangesToThrowingSoapFaultWhenInHandleMode()

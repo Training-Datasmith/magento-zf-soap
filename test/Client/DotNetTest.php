@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap\Client;
 
 use Laminas\Http\Client\Adapter\Curl;

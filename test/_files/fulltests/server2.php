@@ -1,8 +1,10 @@
 <?php
 
-require_once "Laminas/Soap/AutoDiscover.php";
-require_once "Laminas/Soap/Server.php";
-require_once "Laminas/Soap/Wsdl/Strategy/ArrayOfTypeComplex.php";
+declare(strict_types=1);
+
+require_once 'Laminas/Soap/AutoDiscover.php';
+require_once 'Laminas/Soap/Server.php';
+require_once 'Laminas/Soap/Wsdl/Strategy/ArrayOfTypeComplex.php';
 
 class Laminas_Soap_Wsdl_ComplexTypeB
 {
@@ -35,7 +37,7 @@ class Laminas_Soap_Service_Server2
 if (isset($_GET['wsdl'])) {
     $server = new Laminas_Soap_AutoDiscover(new Laminas_Soap_Wsdl_Strategy_ArrayOfTypeComplex());
 } else {
-    $uri = "http://".$_SERVER['HTTP_HOST']."/".$_SERVER['PHP_SELF']."?wsdl";
+    $uri = 'http://'.$_SERVER['HTTP_HOST'].'/'.$_SERVER['PHP_SELF'].'?wsdl';
     $server = new Laminas_Soap_Server($uri);
 }
 $server->setClass('Laminas_Soap_Service_Server2');

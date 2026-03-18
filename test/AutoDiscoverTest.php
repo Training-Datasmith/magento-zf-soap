@@ -1,11 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap;
+
+use function array_keys;
+use function count;
 
 use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use DOMXPath;
+
+use function file_exists;
+use function get_class;
+use function in_array;
+
 use InvalidArgumentException;
 use Laminas\Soap\AutoDiscover;
 use Laminas\Soap\AutoDiscover\DiscoveryStrategy\ReflectionDiscovery;
@@ -20,19 +30,17 @@ use LaminasTest\Soap\TestAsset\AutoDiscoverTestClass2;
 use LaminasTest\Soap\TestAsset\MyService;
 use LaminasTest\Soap\TestAsset\MyServiceSequence;
 use LaminasTest\Soap\TestAsset\NoReturnType;
+
 use LaminasTest\Soap\TestAsset\Recursion;
 use LaminasTest\Soap\TestAsset\Test;
 use LaminasTest\Soap\TestAsset\TestFixingMultiplePrototypes;
+
+use function ob_get_clean;
+use function ob_start;
+
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-use function array_keys;
-use function count;
-use function file_exists;
-use function get_class;
-use function in_array;
-use function ob_get_clean;
-use function ob_start;
 use function trim;
 use function unlink;
 
@@ -107,7 +115,7 @@ class AutoDiscoverTest extends TestCase
 
         $this->assertTrue(
             $dom->schemaValidate(__DIR__ . '/schemas/wsdl.xsd'),
-            "WSDL Did not validate"
+            'WSDL Did not validate'
         );
         unlink($file);
     }
@@ -378,9 +386,9 @@ class AutoDiscoverTest extends TestCase
         $nodes = $this->xpath->query($xpath);
         $this->assertAttributesOfNodes(
             [
-                "use"           => "encoded",
-                "encodingStyle" => "http://schemas.xmlsoap.org/soap/encoding/",
-                "namespace"     => "http://localhost/MyService.php",
+                'use'           => 'encoded',
+                'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/',
+                'namespace'     => 'http://localhost/MyService.php',
             ],
             $nodes
         );
@@ -513,8 +521,8 @@ class AutoDiscoverTest extends TestCase
         );
         $this->assertAttributesOfNodes(
             [
-                'name' => "testFunc1Result",
-                'type' => "xsd:string",
+                'name' => 'testFunc1Result',
+                'type' => 'xsd:string',
             ],
             $nodes
         );
@@ -537,8 +545,8 @@ class AutoDiscoverTest extends TestCase
         );
         $this->assertAttributesOfNodes(
             [
-                'name' => "who",
-                'type' => "xsd:string",
+                'name' => 'who',
+                'type' => 'xsd:string',
             ],
             $nodes
         );
@@ -551,8 +559,8 @@ class AutoDiscoverTest extends TestCase
         );
         $this->assertAttributesOfNodes(
             [
-                'name' => "testFunc2Result",
-                'type' => "xsd:string",
+                'name' => 'testFunc2Result',
+                'type' => 'xsd:string',
             ],
             $nodes
         );
@@ -594,8 +602,8 @@ class AutoDiscoverTest extends TestCase
         );
         $this->assertAttributesOfNodes(
             [
-                'name' => "testFunc3Result",
-                'type' => "xsd:string",
+                'name' => 'testFunc3Result',
+                'type' => 'xsd:string',
             ],
             $nodes
         );
@@ -624,8 +632,8 @@ class AutoDiscoverTest extends TestCase
         );
         $this->assertAttributesOfNodes(
             [
-                'name' => "testFunc4Result",
-                'type' => "xsd:string",
+                'name' => 'testFunc4Result',
+                'type' => 'xsd:string',
             ],
             $nodes
         );
@@ -1196,7 +1204,7 @@ class AutoDiscoverTest extends TestCase
         $this->expectExceptionMessage(
             'Argument to \Laminas\Soap\AutoDiscover::setUri should be string or \Laminas\Uri\Uri instance.'
         );
-        $server->setUri(["bogus"]);
+        $server->setUri(['bogus']);
     }
 
     /**
@@ -1465,8 +1473,8 @@ class AutoDiscoverTest extends TestCase
         ob_start();
         $this->server->handle();
         $actualWsdl = ob_get_clean();
-        $this->assertNotEmpty($actualWsdl, "WSDL content was not outputted.");
-        $this->assertStringContainsString($scriptUri, $actualWsdl, "Script URL was not found in WSDL content.");
+        $this->assertNotEmpty($actualWsdl, 'WSDL content was not outputted.');
+        $this->assertStringContainsString($scriptUri, $actualWsdl, 'Script URL was not found in WSDL content.');
     }
 
     /**

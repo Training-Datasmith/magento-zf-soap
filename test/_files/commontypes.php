@@ -1,4 +1,7 @@
-<?php // phpcs:disable
+<?php
+
+declare(strict_types=1);
+// phpcs:disable
 
 /* Test Functions */
 
@@ -18,7 +21,7 @@ function Laminas_Soap_AutoDiscover_TestFunc($who)
  */
 function Laminas_Soap_AutoDiscover_TestFunc2()
 {
-    return "Hello World";
+    return 'Hello World';
 }
 
 /**
@@ -58,7 +61,7 @@ function Laminas_Soap_AutoDiscover_TestFunc5()
  */
 function Laminas_Soap_AutoDiscover_TestFunc6()
 {
-    return "string";
+    return 'string';
 }
 
 /**
@@ -119,7 +122,7 @@ class Laminas_Soap_AutoDiscover_Test
      */
     public function testFunc1()
     {
-        return "Hello World";
+        return 'Hello World';
     }
 
     /**
@@ -166,7 +169,7 @@ class Laminas_Soap_AutoDiscoverTestClass1
     /**
      * @var string $param
      */
-    public $param = "hello";
+    public $param = 'hello';
 }
 
 class Laminas_Soap_AutoDiscoverTestClass2
@@ -239,7 +242,7 @@ class Laminas_Soap_Wsdl_ComplexObjectStructure
     /**
      * @var string
      */
-    public $string = "Hello World";
+    public $string = 'Hello World';
 
     /**
      * @var int

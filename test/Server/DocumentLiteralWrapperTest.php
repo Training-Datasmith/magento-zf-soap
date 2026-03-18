@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap\Server;
+
+use function ini_set;
 
 use Laminas\Soap\Client\Local as SoapClient;
 use Laminas\Soap\Server;
 use Laminas\Soap\Server\DocumentLiteralWrapper;
 use LaminasTest\Soap\TestAsset\MyCalculatorService;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
-use function ini_set;
+use stdClass;
 
 class DocumentLiteralWrapperTest extends TestCase
 {
@@ -17,7 +20,7 @@ class DocumentLiteralWrapperTest extends TestCase
 
     public function setUp(): void
     {
-        ini_set("soap.wsdl_cache_enabled", 0);
+        ini_set('soap.wsdl_cache_enabled', 0);
     }
 
     /**

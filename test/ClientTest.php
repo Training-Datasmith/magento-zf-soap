@@ -1,6 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap;
+
+use function extension_loaded;
+use function headers_sent;
 
 use Laminas\Config\Config;
 use Laminas\Soap\AutoDiscover;
@@ -12,24 +17,27 @@ use LaminasTest\Soap\TestAsset\TestClass;
 use LaminasTest\Soap\TestAsset\TestData1;
 use LaminasTest\Soap\TestAsset\TestData2;
 use PHPUnit\Framework\TestCase;
-use SoapClient;
-use SoapHeader;
-use UnexpectedValueException;
-
-use function extension_loaded;
-use function headers_sent;
-use function sprintf;
-use function stream_context_create;
-use function strpos;
-use function unlink;
 
 use const SOAP_1_1;
+
 use const SOAP_1_2;
 use const SOAP_COMPRESSION_ACCEPT;
 use const SOAP_COMPRESSION_GZIP;
 use const SOAP_DOCUMENT;
 use const SOAP_ENCODED;
 use const SOAP_RPC;
+
+use SoapClient;
+use SoapHeader;
+
+use function sprintf;
+use function stream_context_create;
+use function strpos;
+
+use UnexpectedValueException;
+
+use function unlink;
+
 use const WSDL_CACHE_NONE;
 
 class ClientTest extends TestCase
@@ -602,8 +610,8 @@ class ClientTest extends TestCase
      */
     public function testSetCookieIsDelegatedToSoapClient()
     {
-        $fixtureCookieKey   = "foo";
-        $fixtureCookieValue = "bar";
+        $fixtureCookieKey   = 'foo';
+        $fixtureCookieValue = 'bar';
 
         $clientMock = $this->getMockBuilder(SoapClient::class)
             ->onlyMethods(['__setCookie'])

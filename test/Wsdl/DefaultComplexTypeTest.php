@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap\Wsdl;
 
 use Laminas\Soap\Wsdl\ComplexTypeStrategy\DefaultComplexType;

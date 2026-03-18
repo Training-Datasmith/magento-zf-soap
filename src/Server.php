@@ -1,21 +1,8 @@
 <?php
 
-namespace Laminas\Soap;
+declare(strict_types=1);
 
-use DOMDocument;
-use DOMNode;
-use Exception;
-use Laminas\Server\Server as LaminasServerServer;
-use Laminas\Soap\Exception\ExtensionNotLoadedException;
-use Laminas\Soap\Exception\InvalidArgumentException;
-use Laminas\Soap\Exception\RuntimeException;
-use Laminas\Stdlib\ArrayUtils;
-use ReflectionClass;
-use SimpleXMLElement;
-use SoapFault;
-use SoapServer;
-use stdClass;
-use Traversable;
+namespace Laminas\Soap;
 
 use function array_merge;
 use function array_search;
@@ -24,9 +11,18 @@ use function array_unique;
 use function array_unshift;
 use function call_user_func_array;
 use function class_exists;
+
+use DOMDocument;
+use DOMNode;
+
+use const E_USER_ERROR;
+
+use Exception;
+
 use function extension_loaded;
 use function file_get_contents;
 use function func_get_args;
+
 use function func_num_args;
 use function function_exists;
 use function get_class_methods;
@@ -39,26 +35,52 @@ use function is_callable;
 use function is_object;
 use function is_string;
 use function is_subclass_of;
+
+use Laminas\Server\Server as LaminasServerServer;
+use Laminas\Soap\Exception\ExtensionNotLoadedException;
+use Laminas\Soap\Exception\InvalidArgumentException;
+use Laminas\Soap\Exception\RuntimeException;
+use Laminas\Stdlib\ArrayUtils;
+
 use function libxml_disable_entity_loader;
+
+use const LIBXML_PARSEHUGE;
+use const LIBXML_VERSION;
+
 use function ob_get_clean;
 use function ob_start;
 use function parse_url;
+
+use const PHP_URL_SCHEME;
+
+use ReflectionClass;
+
 use function restore_error_handler;
 use function set_error_handler;
-use function sprintf;
-use function strlen;
-use function strtolower;
-use function trim;
 
-use const E_USER_ERROR;
-use const LIBXML_PARSEHUGE;
-use const LIBXML_VERSION;
-use const PHP_URL_SCHEME;
+use SimpleXMLElement;
+
 use const SOAP_1_1;
 use const SOAP_1_2;
 use const SOAP_FUNCTIONS_ALL;
 use const SOAP_PERSISTENCE_REQUEST;
+
 use const SOAP_PERSISTENCE_SESSION;
+
+use SoapFault;
+use SoapServer;
+
+use function sprintf;
+
+use stdClass;
+
+use function strlen;
+use function strtolower;
+
+use Traversable;
+
+use function trim;
+
 use const XML_DOCUMENT_TYPE_NODE;
 
 class Server implements LaminasServerServer

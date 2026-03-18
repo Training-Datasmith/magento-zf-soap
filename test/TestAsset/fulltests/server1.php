@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap\TestAsset\fulltests;
 
 class Server1
@@ -13,13 +15,13 @@ class Server1
         $a = new ComplexTypeA();
 
         $b1 = new ComplexTypeB();
-        $b1->bar = "bar";
-        $b1->foo = "bar";
+        $b1->bar = 'bar';
+        $b1->foo = 'bar';
         $a->baz[] = $b1;
 
         $b2 = new ComplexTypeB();
-        $b2->bar = "foo";
-        $b2->foo = "foo";
+        $b2->bar = 'foo';
+        $b2->foo = 'foo';
         $a->baz[] = $b2;
 
         $a->baz[] = $request;
@@ -51,7 +53,7 @@ class ComplexTypeA
 if (isset($_GET['wsdl'])) {
     $server = new \Laminas\Soap\AutoDiscover(new \Laminas\Soap\Wsdl\ComplexTypeStrategy\ArrayOfTypeComplex());
 } else {
-    $uri = "http://".($_SERVER['HTTP_HOST'] ?? 'localhost')."/".($_SERVER['PHP_SELF'] ?? '')."?wsdl";
+    $uri = 'http://'.($_SERVER['HTTP_HOST'] ?? 'localhost').'/'.($_SERVER['PHP_SELF'] ?? '').'?wsdl';
     $server = new \Laminas\Soap\Server($uri);
 }
 $server->setClass('\LaminasTest\Soap\TestAsset\fulltests\Server1');

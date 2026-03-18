@@ -1,4 +1,7 @@
-<?php // phpcs:disable
+<?php
+
+declare(strict_types=1);
+// phpcs:disable
 
 namespace LaminasTest\Soap\TestAsset;
 
@@ -22,7 +25,7 @@ function TestFunc($who)
  */
 function TestFunc2()
 {
-    return "Hello World";
+    return 'Hello World';
 }
 
 /**
@@ -62,7 +65,7 @@ function TestFunc5()
  */
 function TestFunc6()
 {
-    return "string";
+    return 'string';
 }
 
 /**
@@ -123,7 +126,7 @@ class Test
      */
     public function testFunc1()
     {
-        return "Hello World";
+        return 'Hello World';
     }
 
     /**
@@ -170,7 +173,7 @@ class AutoDiscoverTestClass1
     /**
      * @var string $param
      */
-    public $param = "hello";
+    public $param = 'hello';
 }
 
 class AutoDiscoverTestClass2
@@ -243,7 +246,7 @@ class ComplexObjectStructure
     /**
      * @var string
      */
-    public $string = "Hello World";
+    public $string = 'Hello World';
 
     /**
      * @var int
@@ -378,7 +381,7 @@ class TestClass
      */
     public function testFunc1()
     {
-        return "Hello World";
+        return 'Hello World';
     }
 
     /**
@@ -473,7 +476,6 @@ class MockServer extends \Laminas\Soap\Server
     }
 }
 
-
 /** Server test classes */
 class ServerTestClass
 {
@@ -484,7 +486,7 @@ class ServerTestClass
      */
     public function testFunc1()
     {
-        return "Hello World";
+        return 'Hello World';
     }
 
     /**
@@ -527,7 +529,7 @@ class ServerTestClass
      */
     public function testFunc5()
     {
-        trigger_error("Test Message", E_USER_ERROR);
+        trigger_error('Test Message', E_USER_ERROR);
     }
 }
 
@@ -605,8 +607,8 @@ class Anything
 
 class PublicPrivateProtected
 {
-    const PROTECTED_VAR_NAME = 'bar';
-    const PRIVATE_VAR_NAME = 'baz';
+    public const PROTECTED_VAR_NAME = 'bar';
+    public const PRIVATE_VAR_NAME = 'baz';
 
     /**
      * @var string

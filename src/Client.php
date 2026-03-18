@@ -1,18 +1,15 @@
 <?php
 
-namespace Laminas\Soap;
+declare(strict_types=1);
 
-use Laminas\Server\Client as ServerClient;
-use Laminas\Stdlib\ArrayUtils;
-use SoapClient;
-use SoapHeader;
-use Traversable;
+namespace Laminas\Soap;
 
 use function array_merge;
 use function call_user_func_array;
 use function class_exists;
 use function count;
 use function extension_loaded;
+
 use function get_resource_type;
 use function in_array;
 use function is_array;
@@ -20,17 +17,28 @@ use function is_callable;
 use function is_readable;
 use function is_resource;
 use function is_string;
+
+use Laminas\Server\Client as ServerClient;
+use Laminas\Stdlib\ArrayUtils;
+
 use function parse_url;
-use function sprintf;
-use function strtolower;
 
 use const PHP_URL_SCHEME;
 use const SOAP_1_1;
 use const SOAP_1_2;
 use const SOAP_DOCUMENT;
 use const SOAP_ENCODED;
+
 use const SOAP_LITERAL;
 use const SOAP_RPC;
+
+use SoapClient;
+use SoapHeader;
+
+use function sprintf;
+use function strtolower;
+
+use Traversable;
 
 class Client implements ServerClient
 {
@@ -861,7 +869,7 @@ class Client implements ServerClient
      */
     public function setStreamContext($context): static
     {
-        if (! is_resource($context) || get_resource_type($context) !== "stream-context") {
+        if (! is_resource($context) || get_resource_type($context) !== 'stream-context') {
             throw new Exception\InvalidArgumentException('Invalid stream context resource given.');
         }
 

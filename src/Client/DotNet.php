@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Client;
 
 use InvalidArgumentException;
@@ -9,9 +11,10 @@ use Laminas\Soap\Client as SOAPClient;
 use Laminas\Soap\Client\Common as CommonClient;
 use Laminas\Soap\Exception;
 use Laminas\Uri\Http as HttpUri;
-use Traversable;
 
 use const SOAP_1_1;
+
+use Traversable;
 
 /**
  * .NET SOAP client
@@ -211,7 +214,7 @@ class DotNet extends SOAPClient
     {
         if (count($arguments) > 1
             || (count($arguments) == 1  &&  ! is_array(reset($arguments)))
-           ) {
+        ) {
             throw new Exception\RuntimeException(
                 '.Net webservice arguments must be grouped into an array: array("a" => $a, "b" => $b, ...).'
             );

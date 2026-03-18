@@ -1,14 +1,17 @@
 <?php
 
-namespace LaminasTest\Soap\AutoDiscover;
+declare(strict_types=1);
 
-use Laminas\Soap\Client;
-use LaminasTest_Soap_TestAsset_ComplexTypeB;
-use PHPUnit\Framework\TestCase;
-use stdClass;
+namespace LaminasTest\Soap\AutoDiscover;
 
 use function count;
 use function getenv;
+
+use Laminas\Soap\Client;
+use LaminasTest_Soap_TestAsset_ComplexTypeB;
+
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class OnlineTest extends TestCase
 {
@@ -27,11 +30,11 @@ class OnlineTest extends TestCase
 
     public function testNestedObjectArrayResponse()
     {
-        $wsdl = $this->baseuri . "/server1.php?wsdl";
+        $wsdl = $this->baseuri . '/server1.php?wsdl';
 
         $b      = new LaminasTest_Soap_TestAsset_ComplexTypeB();
-        $b->bar = "test";
-        $b->foo = "test";
+        $b->bar = 'test';
+        $b->foo = 'test';
 
         $client = new Client($wsdl);
         $ret    = $client->request($b);
@@ -42,23 +45,23 @@ class OnlineTest extends TestCase
         $this->assertEquals(3, count($ret[0]->baz));
 
         $baz = $ret[0]->baz;
-        $this->assertEquals("bar", $baz[0]->bar);
-        $this->assertEquals("bar", $baz[0]->foo);
-        $this->assertEquals("foo", $baz[1]->bar);
-        $this->assertEquals("foo", $baz[1]->foo);
-        $this->assertEquals("test", $baz[2]->bar);
-        $this->assertEquals("test", $baz[2]->foo);
+        $this->assertEquals('bar', $baz[0]->bar);
+        $this->assertEquals('bar', $baz[0]->foo);
+        $this->assertEquals('foo', $baz[1]->bar);
+        $this->assertEquals('foo', $baz[1]->foo);
+        $this->assertEquals('test', $baz[2]->bar);
+        $this->assertEquals('test', $baz[2]->foo);
     }
 
     public function testObjectResponse()
     {
-        $wsdl = $this->baseuri . "/server2.php?wsdl";
+        $wsdl = $this->baseuri . '/server2.php?wsdl';
 
         $client = new Client($wsdl);
-        $ret    = $client->request("test", "test");
+        $ret    = $client->request('test', 'test');
 
         $this->assertInstanceOf(stdClass::class, $ret);
-        $this->assertEquals("test", $ret->foo);
-        $this->assertEquals("test", $ret->bar);
+        $this->assertEquals('test', $ret->foo);
+        $this->assertEquals('test', $ret->bar);
     }
 }

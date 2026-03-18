@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Server;
+
+use function call_user_func_array;
+use function count;
+
+use function get_object_vars;
 
 use Laminas\Soap\Exception;
 use ReflectionObject;
 
-use function call_user_func_array;
-use function count;
-use function get_class;
-use function get_object_vars;
 use function sprintf;
 
 /**
@@ -123,7 +126,7 @@ class DocumentLiteralWrapper
         foreach (get_object_vars($document) as $argName => $argValue) {
             if (! isset($params[$argName])) {
                 throw new Exception\UnexpectedValueException(sprintf(
-                    "Received unknown argument %s which is not an argument to %s::%s",
+                    'Received unknown argument %s which is not an argument to %s::%s',
                     $argName,
                     $this->object::class,
                     $method
@@ -153,7 +156,7 @@ class DocumentLiteralWrapper
     {
         if (! $this->reflection->hasMethod($method)) {
             throw new Exception\BadMethodCallException(sprintf(
-                "Method %s does not exist on delegate object %s",
+                'Method %s does not exist on delegate object %s',
                 $method,
                 $this->object::class
             ));
@@ -167,7 +170,7 @@ class DocumentLiteralWrapper
     {
         if (count($args) !== 1) {
             throw new Exception\UnexpectedValueException(sprintf(
-                "Expecting exactly one argument that is the document/literal wrapper, got %d",
+                'Expecting exactly one argument that is the document/literal wrapper, got %d',
                 count($args)
             ));
         }

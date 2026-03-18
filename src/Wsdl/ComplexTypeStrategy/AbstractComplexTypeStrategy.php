@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Wsdl\ComplexTypeStrategy;
 
-use Laminas\Soap\Wsdl;
-use Laminas\Soap\Wsdl\DocumentationStrategy\DocumentationStrategyInterface;
-
 use function array_key_exists;
+
+use Laminas\Soap\Wsdl;
+
+use Laminas\Soap\Wsdl\DocumentationStrategy\DocumentationStrategyInterface;
 
 /**
  * Abstract class for Laminas\Soap\Wsdl\Strategy.

@@ -1,32 +1,35 @@
 <?php
 
-namespace Laminas\Soap;
+declare(strict_types=1);
 
-use DOMElement;
-use Laminas\Server\Reflection;
-use Laminas\Soap\AutoDiscover\DiscoveryStrategy\DiscoveryStrategyInterface as DiscoveryStrategy;
-use Laminas\Soap\AutoDiscover\DiscoveryStrategy\ReflectionDiscovery;
-use Laminas\Soap\Wsdl;
-use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTypeStrategy;
-use Laminas\Uri;
+namespace Laminas\Soap;
 
 use function array_unique;
 use function count;
+
+use DOMElement;
+
+use const ENT_QUOTES;
+
 use function function_exists;
-use function get_class;
-use function gettype;
 use function header;
+
 use function htmlspecialchars;
 use function is_array;
-use function is_object;
 use function is_string;
 use function is_subclass_of;
+
+use Laminas\Server\Reflection;
+use Laminas\Soap\AutoDiscover\DiscoveryStrategy\DiscoveryStrategyInterface as DiscoveryStrategy;
+use Laminas\Soap\AutoDiscover\DiscoveryStrategy\ReflectionDiscovery;
+use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTypeStrategy;
+use Laminas\Uri;
+
 use function preg_match;
 use function sprintf;
 use function strlen;
-use function trim;
 
-use const ENT_QUOTES;
+use function trim;
 
 class AutoDiscover
 {
@@ -67,7 +70,7 @@ class AutoDiscover
      */
     protected $operationBodyStyle = [
         'use'           => 'encoded',
-        'encodingStyle' => "http://schemas.xmlsoap.org/soap/encoding/",
+        'encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/',
     ];
 
     /**
@@ -499,7 +502,7 @@ class AutoDiscover
             if ($this->bindingStyle['style'] === 'document') {
                 // Document style: wrap the return value in a sequence element
                 $sequence = [];
-                if ($prototype->getReturnType() !== "void") {
+                if ($prototype->getReturnType() !== 'void') {
                     $sequence[] = [
                         'name' => $functionName . 'Result',
                         'type' => $wsdl->getType(
@@ -515,7 +518,7 @@ class AutoDiscover
 
                 // Add the wrapper element part, which must be named 'parameters'
                 $args['parameters'] = ['element' => $wsdl->addElement($element)];
-            } elseif ($prototype->getReturnType() !== "void") {
+            } elseif ($prototype->getReturnType() !== 'void') {
                 // RPC style: add the return value as a typed part
                 $args['return'] = [
                     'type' => $wsdl->getType($this->discoveryStrategy->getFunctionReturnType($function, $prototype)),

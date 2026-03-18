@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\Wsdl\DocumentationStrategy;
+
+use function explode;
+use function implode;
+
+use function preg_match;
+use function preg_replace;
 
 use ReflectionClass;
 use ReflectionProperty;
 
-use function explode;
-use function implode;
-use function preg_match;
-use function preg_replace;
 use function trim;
 
 final class ReflectionDocumentation implements DocumentationStrategyInterface

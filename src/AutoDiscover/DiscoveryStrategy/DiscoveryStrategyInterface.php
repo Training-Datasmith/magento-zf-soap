@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap\AutoDiscover\DiscoveryStrategy;
 
 use Laminas\Server\Reflection\AbstractFunction;

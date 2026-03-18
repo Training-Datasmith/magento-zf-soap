@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Soap\Wsdl;
+
+use function get_class;
 
 use Laminas\Soap\Exception\InvalidArgumentException;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy;
@@ -12,9 +16,8 @@ use Laminas\Soap\Wsdl\ComplexTypeStrategy\DefaultComplexType;
 use LaminasTest\Soap\TestAsset\Anything;
 use LaminasTest\Soap\TestAsset\Book;
 use LaminasTest\Soap\TestAsset\Cookie;
-use LaminasTest\Soap\WsdlTestHelper;
 
-use function get_class;
+use LaminasTest\Soap\WsdlTestHelper;
 
 /**
  * @group      Laminas_Soap

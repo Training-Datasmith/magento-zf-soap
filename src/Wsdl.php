@@ -1,31 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Soap;
+
+use function count;
 
 use DOMDocument;
 use DOMDocumentFragment;
 use DOMElement;
 use DOMNode;
 use DOMXPath;
-use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTypeStrategy;
-use Laminas\Uri\Uri;
 
-use function count;
+use const ENT_QUOTES;
+
 use function file_put_contents;
 use function htmlspecialchars;
 use function in_array;
 use function is_array;
 use function is_string;
+
+use Laminas\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTypeStrategy;
+use Laminas\Uri\Uri;
+
+use const SOAP_1_1;
+use const SOAP_1_2;
+
 use function str_replace;
 use function strlen;
 use function strrpos;
+
 use function strtolower;
 use function substr;
 use function trim;
-
-use const ENT_QUOTES;
-use const SOAP_1_1;
-use const SOAP_1_2;
 
 class Wsdl
 {
