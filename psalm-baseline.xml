@@ -25,7 +25,7 @@
     <InvalidPropertyAssignmentValue>
       <code><![CDATA[$strategy]]></code>
       <code><![CDATA[$uri]]></code>
-      <code><![CDATA[Uri\UriFactory::factory($this->uri)]]></code>
+      <code><![CDATA[Uri\Uri_Factory::factory($this->uri)]]></code>
     </InvalidPropertyAssignmentValue>
     <InvalidReturnStatement>
       <code><![CDATA[$this->uri]]></code>
@@ -161,7 +161,7 @@
       <code><![CDATA[resource]]></code>
     </InvalidReturnType>
     <InvalidThrow>
-      <code><![CDATA[Exception\ExceptionInterface]]></code>
+      <code><![CDATA[Exception\Exception_Interface]]></code>
     </InvalidThrow>
     <MissingOverrideAttribute>
       <code><![CDATA[public function call($method, $params = [])]]></code>
@@ -1391,10 +1391,10 @@
       <code><![CDATA[$this->mockSoapServer]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
-      <code><![CDATA[\LaminasTest\Soap\TestAsset\MyResponse[]]]></code>
-      <code><![CDATA[\LaminasTest\Soap\TestAsset\MyResponse[]]]></code>
-      <code><![CDATA[\LaminasTest\Soap\TestAsset\MyResponse[]]]></code>
-      <code><![CDATA[\LaminasTest\Soap\TestAsset\Recursion]]></code>
+      <code><![CDATA[\Laminas_Test\Soap\Test_Asset\My_Response[]]]></code>
+      <code><![CDATA[\Laminas_Test\Soap\Test_Asset\My_Response[]]]></code>
+      <code><![CDATA[\Laminas_Test\Soap\Test_Asset\My_Response[]]]></code>
+      <code><![CDATA[\Laminas_Test\Soap\Test_Asset\Recursion]]></code>
       <code><![CDATA[getSoap]]></code>
       <code><![CDATA[integer]]></code>
       <code><![CDATA[string[]]]></code>
