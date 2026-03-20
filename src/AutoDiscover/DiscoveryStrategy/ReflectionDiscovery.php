@@ -1,54 +1,49 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Soap\Auto_Discover\Discovery_Strategy;
 
-namespace Laminas\Soap\AutoDiscover\DiscoveryStrategy;
-
-use Laminas\Server\Reflection\AbstractFunction;
+use Laminas\Server\Reflection\Abstract_Function;
 use Laminas\Server\Reflection\Prototype;
 use Laminas\Server\Reflection\ReflectionParameter;
-
 /**
  * Describes how types, return values and method details are detected during
  * AutoDiscovery of a WSDL.
  */
-class ReflectionDiscovery implements DiscoveryStrategyInterface
+class Reflection_Discovery implements Discovery_Strategy_Interface
 {
     /**
      * Returns description from phpdoc block
      *
      * @return string
      */
-    public function getFunctionDocumentation(AbstractFunction $function)
+    public function get_function_documentation(Abstract_Function $function)
     {
-        return $function->getDescription();
+        return $function->get_description();
     }
-
     /**
      * Return parameter type
      *
      * @return string
      */
-    public function getFunctionParameterType(ReflectionParameter $param)
+    public function get_function_parameter_type(ReflectionParameter $param)
     {
-        return $param->getType();
+        return $param->get_type();
     }
-
     /**
      * Return function return type
      *
      * @return string
      */
-    public function getFunctionReturnType(AbstractFunction $function, Prototype $prototype)
+    public function get_function_return_type(Abstract_Function $function, Prototype $prototype)
     {
-        return $prototype->getReturnType();
+        return $prototype->get_return_type();
     }
-
     /**
      * Return true if function is one way (return nothing)
      */
-    public function isFunctionOneWay(AbstractFunction $function, Prototype $prototype): bool
+    public function is_function_one_way(Abstract_Function $function, Prototype $prototype): bool
     {
-        return $prototype->getReturnType() === 'void';
+        return $prototype->get_return_type() === 'void';
     }
 }

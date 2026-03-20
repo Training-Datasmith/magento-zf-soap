@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Laminas\Soap\Auto_Discover\Discovery_Strategy;
 
-namespace Laminas\Soap\AutoDiscover\DiscoveryStrategy;
-
-use Laminas\Server\Reflection\AbstractFunction;
+use Laminas\Server\Reflection\Abstract_Function;
 use Laminas\Server\Reflection\Prototype;
 use Laminas\Server\Reflection\ReflectionParameter;
-
 /**
  * Describes how types, return values and method details are detected during
  * AutoDiscovery of a WSDL.
  */
-interface DiscoveryStrategyInterface
+interface Discovery_Strategy_Interface
 {
     /**
      * Get the function parameters php type.
@@ -21,8 +19,7 @@ interface DiscoveryStrategyInterface
      *
      * @return string
      */
-    public function getFunctionParameterType(ReflectionParameter $param);
-
+    public function get_function_parameter_type(ReflectionParameter $param);
     /**
      * Get the functions return php type.
      *
@@ -30,8 +27,7 @@ interface DiscoveryStrategyInterface
      *
      * @return string
      */
-    public function getFunctionReturnType(AbstractFunction $function, Prototype $prototype);
-
+    public function get_function_return_type(Abstract_Function $function, Prototype $prototype);
     /**
      * Detect if the function is a one-way or two-way operation.
      *
@@ -39,8 +35,7 @@ interface DiscoveryStrategyInterface
      *
      * @return bool
      */
-    public function isFunctionOneWay(AbstractFunction $function, Prototype $prototype);
-
+    public function is_function_one_way(Abstract_Function $function, Prototype $prototype);
     /**
      * Detect the functions documentation.
      *
@@ -48,5 +43,5 @@ interface DiscoveryStrategyInterface
      *
      * @return string
      */
-    public function getFunctionDocumentation(AbstractFunction $function);
+    public function get_function_documentation(Abstract_Function $function);
 }

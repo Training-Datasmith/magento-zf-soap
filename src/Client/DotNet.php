@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Soap\Client;
 
 use InvalidArgumentException;
@@ -11,53 +10,45 @@ use Laminas\Soap\Client as SOAPClient;
 use Laminas\Soap\Client\Common as CommonClient;
 use Laminas\Soap\Exception;
 use Laminas\Uri\Http as HttpUri;
-
 use const SOAP_1_1;
-
 use Traversable;
-
 /**
  * .NET SOAP client
  *
  * Class is intended to be used with .NET Web Services.
  */
-class DotNet extends SOAPClient
+class Dot_Net extends Soap_Client
 {
     /**
      * Curl HTTP client adapter.
      *
      * @var CurlClient
      */
-    protected $curlClient;
-
+    protected $curl_client;
     /**
      * The last request headers.
      *
      * @var string
      */
-    protected $lastRequestHeaders = '';
-
+    protected $last_request_headers = '';
     /**
      * The last response headers.
      *
      * @var string
      */
-    protected $lastResponseHeaders = '';
-
+    protected $last_response_headers = '';
     /**
      * SOAP client options.
      *
      * @var array
      */
     protected $options = [];
-
     /**
      * Should NTLM authentication be used?
      *
      * @var boolean
      */
-    protected $useNtlm = false;
-
+    protected $use_ntlm = false;
     /**
      * Constructor
      *
@@ -67,11 +58,9 @@ class DotNet extends SOAPClient
     public function __construct($wsdl = null, $options = null)
     {
         // Use SOAP 1.1 as default
-        $this->setSoapVersion(SOAP_1_1);
-
+        $this->set_soap_version(SOAP_1_1);
         parent::__construct($wsdl, $options);
     }
-
     // @codingStandardsIgnoreStart
     /**
      * Do request proxy method.
@@ -84,102 +73,70 @@ class DotNet extends SOAPClient
      * @param  int          $oneWay  (Optional) The number 1 if a response is not expected.
      * @return string The XML SOAP response.
      */
-    public function _doRequest(CommonClient $client, $request, $location, $action, $version, $oneWay = null)
+    public function _do_request(Common_Client $client, $request, $location, $action, $version, $one_way = null)
     {
-        if (! $this->useNtlm) {
-            return parent::_doRequest(
-                $client,
-                $request,
-                $location,
-                $action,
-                $version,
-                $oneWay
-            );
+        if (!$this->use_ntlm) {
+            return parent::_do_request($client, $request, $location, $action, $version, $one_way);
         }
-
-        $curlClient = $this->getCurlClient();
-
+        $curl_client = $this->get_curl_client();
         // @todo persistent connection ?
-        $headers    = [
-            'Content-Type' => 'text/xml; charset=utf-8',
-            'Method'       => 'POST',
-            'SOAPAction'   => '"' . $action . '"',
-            'User-Agent'   => 'PHP-SOAP-CURL',
-        ];
-        $uri = new HttpUri($location);
-
+        $headers = ['Content-Type' => 'text/xml; charset=utf-8', 'Method' => 'POST', 'SOAPAction' => '"' . $action . '"', 'User-Agent' => 'PHP-SOAP-CURL'];
+        $uri = new Http_Uri($location);
         // @todo use parent set* options for ssl certificate authorization
-        $curlClient
-            ->setCurlOption(CURLOPT_HTTPAUTH, CURLAUTH_NTLM)
-            ->setCurlOption(CURLOPT_SSL_VERIFYHOST, false)
-            ->setCurlOption(CURLOPT_SSL_VERIFYPEER, false)
-            ->setCurlOption(CURLOPT_USERPWD, sprintf(
-                '%s:%s',
-                $this->options['login'],
-                $this->options['password']
-            ));
-
+        $curl_client->set_curl_option(CURLOPT_HTTPAUTH, CURLAUTH_NTLM)->set_curl_option(CURLOPT_SSL_VERIFYHOST, false)->set_curl_option(CURLOPT_SSL_VERIFYPEER, false)->set_curl_option(CURLOPT_USERPWD, sprintf('%s:%s', $this->options['login'], $this->options['password']));
         // Perform the cURL request and get the response
-        $curlClient->connect($uri->getHost(), $uri->getPort());
-        $curlClient->write('POST', $uri, 1.1, $headers, $request);
-        $response = HttpResponse::fromString($curlClient->read());
-
+        $curl_client->connect($uri->get_host(), $uri->get_port());
+        $curl_client->write('POST', $uri, 1.1, $headers, $request);
+        $response = Http_Response::from_string($curl_client->read());
         // @todo persistent connection ?
-        $curlClient->close();
-
+        $curl_client->close();
         // Save headers
-        $this->lastRequestHeaders  = $this->flattenHeaders($headers);
-        $this->lastResponseHeaders = $response->getHeaders()->toString();
-
+        $this->last_request_headers = $this->flatten_headers($headers);
+        $this->last_response_headers = $response->get_headers()->to_string();
         // Return only the XML body
-        return $response->getBody();
+        return $response->get_body();
     }
     // @codingStandardsIgnoreEnd
-
     /**
      * Returns the cURL client that is being used.
      *
      * @return CurlClient
      */
-    public function getCurlClient()
+    public function get_curl_client()
     {
-        if ($this->curlClient === null) {
-            $this->curlClient = new CurlClient();
+        if ($this->curl_client === null) {
+            $this->curl_client = new Curl_Client();
         }
-        return $this->curlClient;
+        return $this->curl_client;
     }
-
     /**
      * Retrieve request headers.
      *
      * @return string Request headers.
      */
-    public function getLastRequestHeaders()
+    public function get_last_request_headers()
     {
-        return $this->lastRequestHeaders;
+        return $this->last_request_headers;
     }
-
     /**
      * Retrieve response headers (as string)
      *
      * @return string Response headers.
      */
-    public function getLastResponseHeaders()
+    public function get_last_response_headers()
     {
-        return $this->lastResponseHeaders;
+        return $this->last_response_headers;
     }
-
     /**
      * Sets the cURL client to use.
      *
      * @param  CurlClient $curlClient The cURL client.
      */
-    public function setCurlClient(CurlClient $curlClient): static
+    public function set_curl_client(Curl_Client $curl_client): static
     {
-        $this->curlClient = $curlClient;
+        $this->curl_client = $curl_client;
         return $this;
     }
-
     /**
      * Sets options.
      *
@@ -189,17 +146,15 @@ class DotNet extends SOAPClient
      * @throws InvalidArgumentException If an unsupported option is passed.
      * @return self
      */
-    public function setOptions($options)
+    public function set_options($options)
     {
         if (isset($options['authentication']) && $options['authentication'] === 'ntlm') {
-            $this->useNtlm = true;
+            $this->use_ntlm = true;
             unset($options['authentication']);
         }
-
         $this->options = $options;
-        return parent::setOptions($options);
+        return parent::set_options($options);
     }
-
     // @codingStandardsIgnoreStart
     /**
      * Perform arguments pre-processing
@@ -210,21 +165,15 @@ class DotNet extends SOAPClient
      * @return array
      * @throws Exception\RuntimeException
      */
-    protected function _preProcessArguments($arguments)
+    protected function _pre_process_arguments($arguments)
     {
-        if (count($arguments) > 1
-            || (count($arguments) == 1  &&  ! is_array(reset($arguments)))
-        ) {
-            throw new Exception\RuntimeException(
-                '.Net webservice arguments must be grouped into an array: array("a" => $a, "b" => $b, ...).'
-            );
+        if (count($arguments) > 1 || count($arguments) == 1 && !is_array(reset($arguments))) {
+            throw new Exception\RuntimeException('.Net webservice arguments must be grouped into an array: array("a" => $a, "b" => $b, ...).');
         }
-
         // Do nothing
         return $arguments;
     }
     // @codingStandardsIgnoreEnd
-
     // @codingStandardsIgnoreStart
     /**
      * Perform result pre-processing
@@ -234,30 +183,27 @@ class DotNet extends SOAPClient
      * @param  object $result
      * @return mixed
      */
-    protected function _preProcessResult($result)
+    protected function _pre_process_result($result)
     {
-        $resultProperty = $this->getLastMethod() . 'Result';
-        if (property_exists($result, $resultProperty)) {
-            return $result->$resultProperty;
+        $result_property = $this->get_last_method() . 'Result';
+        if (property_exists($result, $result_property)) {
+            return $result->{$result_property};
         }
         return $result;
     }
     // @codingStandardsIgnoreEnd
-
     /**
      * Flattens an HTTP headers array into a string.
      *
      * @param  array $headers The headers to flatten.
      * @return string The headers string.
      */
-    protected function flattenHeaders(array $headers): string
+    protected function flatten_headers(array $headers): string
     {
         $result = '';
-
         foreach ($headers as $name => $value) {
             $result .= $name . ': ' . $value . "\r\n";
         }
-
         return $result;
     }
 }

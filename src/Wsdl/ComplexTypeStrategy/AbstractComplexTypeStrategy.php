@@ -1,19 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Laminas\Soap\Wsdl\ComplexTypeStrategy;
+declare (strict_types=1);
+namespace Laminas\Soap\Wsdl\Complex_Type_Strategy;
 
 use function array_key_exists;
-
 use Laminas\Soap\Wsdl;
-
-use Laminas\Soap\Wsdl\DocumentationStrategy\DocumentationStrategyInterface;
-
+use Laminas\Soap\Wsdl\Documentation_Strategy\Documentation_Strategy_Interface;
 /**
  * Abstract class for Laminas\Soap\Wsdl\Strategy.
  */
-abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategyInterface
+abstract class Abstract_Complex_Type_Strategy implements Complex_Type_Strategy_Interface
 {
     /**
      * Context object
@@ -21,48 +17,43 @@ abstract class AbstractComplexTypeStrategy implements ComplexTypeStrategyInterfa
      * @var Wsdl
      */
     protected $context;
-
     /** @var DocumentationStrategyInterface */
-    protected $documentationStrategy;
-
+    protected $documentation_strategy;
     /**
      * Set the WSDL Context object this strategy resides in.
      */
-    public function setContext(Wsdl $context): void
+    public function set_context(Wsdl $context): void
     {
         $this->context = $context;
     }
-
     /**
      * Return the current WSDL context object
      *
      * @return Wsdl
      */
-    public function getContext()
+    public function get_context()
     {
         return $this->context;
     }
-
     /**
      * Look through registered types
      *
      * @param string $phpType
      * @return null|string
      */
-    public function scanRegisteredTypes($phpType)
+    public function scan_registered_types($php_type)
     {
-        if (array_key_exists($phpType, $this->getContext()->getTypes())) {
-            $soapTypes = $this->getContext()->getTypes();
-            return $soapTypes[$phpType];
+        if (array_key_exists($php_type, $this->get_context()->get_types())) {
+            $soap_types = $this->get_context()->get_types();
+            return $soap_types[$php_type];
         }
         return null;
     }
-
     /**
      * Sets the strategy for generating complex type documentation
      */
-    public function setDocumentationStrategy(DocumentationStrategyInterface $documentationStrategy): void
+    public function set_documentation_strategy(Documentation_Strategy_Interface $documentation_strategy): void
     {
-        $this->documentationStrategy = $documentationStrategy;
+        $this->documentation_strategy = $documentation_strategy;
     }
 }

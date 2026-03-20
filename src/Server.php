@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Soap;
 
 use function array_merge;
@@ -11,18 +10,13 @@ use function array_unique;
 use function array_unshift;
 use function call_user_func_array;
 use function class_exists;
-
-use DOMDocument;
-use DOMNode;
-
+use Dom_Document;
+use Dom_Node;
 use const E_USER_ERROR;
-
 use Exception;
-
 use function extension_loaded;
 use function file_get_contents;
 use function func_get_args;
-
 use function func_num_args;
 use function function_exists;
 use function get_class_methods;
@@ -35,55 +29,37 @@ use function is_callable;
 use function is_object;
 use function is_string;
 use function is_subclass_of;
-
 use Laminas\Server\Server as LaminasServerServer;
-use Laminas\Soap\Exception\ExtensionNotLoadedException;
+use Laminas\Soap\Exception\Extension_Not_Loaded_Exception;
 use Laminas\Soap\Exception\InvalidArgumentException;
 use Laminas\Soap\Exception\RuntimeException;
-use Laminas\Stdlib\ArrayUtils;
-
+use Laminas\Stdlib\Array_Utils;
 use function libxml_disable_entity_loader;
-
 use const LIBXML_PARSEHUGE;
 use const LIBXML_VERSION;
-
 use function ob_get_clean;
 use function ob_start;
 use function parse_url;
-
 use const PHP_URL_SCHEME;
-
 use ReflectionClass;
-
 use function restore_error_handler;
 use function set_error_handler;
-
-use SimpleXMLElement;
-
+use Simple_Xml_Element;
 use const SOAP_1_1;
 use const SOAP_1_2;
 use const SOAP_FUNCTIONS_ALL;
 use const SOAP_PERSISTENCE_REQUEST;
-
 use const SOAP_PERSISTENCE_SESSION;
-
-use SoapFault;
-use SoapServer;
-
+use Soap_Fault;
+use Soap_Server;
 use function sprintf;
-
 use stdClass;
-
 use function strlen;
 use function strtolower;
-
 use Traversable;
-
 use function trim;
-
 use const XML_DOCUMENT_TYPE_NODE;
-
-class Server implements LaminasServerServer
+class Server implements Laminas_Server_Server
 {
     /**
      * Actor URI
@@ -91,14 +67,12 @@ class Server implements LaminasServerServer
      * @var string URI
      */
     protected $actor;
-
     /**
      * Class registered with this server
      *
      * @var string
      */
     protected $class;
-
     /**
      * Server instance
      *
@@ -110,141 +84,121 @@ class Server implements LaminasServerServer
      *
      * @var array
      */
-    protected $classArgs = [];
-
+    protected $class_args = [];
     /**
      * Array of SOAP type => PHP class pairings for handling return/incoming values
      *
      * @var array
      */
     protected $classmap;
-
     /**
      * Encoding
      *
      * @var string
      */
     protected $encoding;
-
     /**
      * Registered fault exceptions
      *
      * @var array
      */
-    protected $faultExceptions = [];
-
+    protected $fault_exceptions = [];
     /**
      * Container for caught exception during business code execution
      *
      * @var Exception
      */
-    protected $caughtException;
-
+    protected $caught_exception;
     /**
      * SOAP Server Features
      *
      * @var int
      */
     protected $features;
-
     /**
      * Functions registered with this server; may be either an array or the SOAP_FUNCTIONS_ALL constant
      *
      * @var array|int
      */
     protected $functions = [];
-
     /**
      * Object registered with this server
      *
      * @var object
      */
     protected $object;
-
     /**
      * Informs if the soap server is in debug mode
      *
      * @var bool
      */
     protected $debug = false;
-
     /**
      * Persistence mode; should be one of the SOAP persistence constants
      *
      * @var int
      */
     protected $persistence;
-
     /**
      * Request XML
      *
      * @var string
      */
     protected $request;
-
     /**
      * Response XML
      *
      * @var string
      */
     protected $response;
-
     /**
      * Flag: whether or not {@link handle()} should return a response instead of automatically emitting it.
      *
      * @var bool
      */
-    protected $returnResponse = false;
-
+    protected $return_response = false;
     /**
      * SOAP version to use; SOAP_1_2 by default, to allow processing of headers
      *
      * @var int
      */
-    protected $soapVersion = SOAP_1_2;
-
+    protected $soap_version = SOAP_1_2;
     /**
      * Array of type mappings
      *
      * @var array
      */
     protected $typemap;
-
     /**
      * URI namespace for SOAP server
      *
      * @var string URI
      */
     protected $uri;
-
     /**
      * URI or path to WSDL
      *
      * @var string
      */
     protected $wsdl;
-
     /**
      * WSDL Caching Options of SOAP Server
      *
      * @var mixed
      */
-    protected $wsdlCache;
-
+    protected $wsdl_cache;
     /**
      * The send_errors Options of SOAP Server
      *
      * @var bool
      */
-    protected $sendErrors;
-
+    protected $send_errors;
     /**
      * Allows LIBXML_PARSEHUGE Options of DOMDocument->loadXML( string $source [, int $options = 0 ] ) to be set
      *
      * @var bool
      */
-    protected $parseHuge;
-
+    protected $parse_huge;
     /**
      * Constructor
      *
@@ -261,19 +215,16 @@ class Server implements LaminasServerServer
      */
     public function __construct($wsdl = null, ?array $options = null)
     {
-        if (! extension_loaded('soap')) {
-            throw new ExtensionNotLoadedException('SOAP extension is not loaded.');
+        if (!extension_loaded('soap')) {
+            throw new Extension_Not_Loaded_Exception('SOAP extension is not loaded.');
         }
-
         if (null !== $wsdl) {
-            $this->setWSDL($wsdl);
+            $this->set_wsdl($wsdl);
         }
-
         if (null !== $options) {
-            $this->setOptions($options);
+            $this->set_options($options);
         }
     }
-
     /**
      * Set Options
      *
@@ -281,170 +232,139 @@ class Server implements LaminasServerServer
      *
      * @param array|Traversable $options
      */
-    public function setOptions($options): static
+    public function set_options($options): static
     {
         if ($options instanceof Traversable) {
-            $options = ArrayUtils::iteratorToArray($options);
+            $options = Array_Utils::iterator_to_array($options);
         }
-
         foreach ($options as $key => $value) {
             switch (strtolower($key)) {
                 case 'actor':
-                    $this->setActor($value);
+                    $this->set_actor($value);
                     break;
-
                 case 'classmap':
                 case 'class_map':
-                    $this->setClassmap($value);
+                    $this->set_classmap($value);
                     break;
-
                 case 'typemap':
                 case 'type_map':
-                    $this->setTypemap($value);
+                    $this->set_typemap($value);
                     break;
-
                 case 'encoding':
-                    $this->setEncoding($value);
+                    $this->set_encoding($value);
                     break;
-
                 case 'soapversion':
                 case 'soap_version':
-                    $this->setSoapVersion($value);
+                    $this->set_soap_version($value);
                     break;
-
                 case 'uri':
-                    $this->setUri($value);
+                    $this->set_uri($value);
                     break;
-
                 case 'wsdl':
-                    $this->setWSDL($value);
+                    $this->set_wsdl($value);
                     break;
-
                 case 'cache_wsdl':
-                    $this->setWSDLCache($value);
+                    $this->set_wsdl_cache($value);
                     break;
-
                 case 'features':
-                    $this->setSoapFeatures($value);
+                    $this->set_soap_features($value);
                     break;
-
                 case 'send_errors':
-                    $this->setSendErrors($value);
+                    $this->set_send_errors($value);
                     break;
-
                 case 'parse_huge':
-                    $this->setParseHuge($value);
+                    $this->set_parse_huge($value);
                     break;
-
                 default:
                     break;
             }
         }
-
         return $this;
     }
-
     /**
      * Return array of options suitable for using with SoapServer constructor
      */
-    public function getOptions(): array
+    public function get_options(): array
     {
         $options = [];
         if (null !== $this->actor) {
-            $options['actor'] = $this->getActor();
+            $options['actor'] = $this->get_actor();
         }
-
         if (null !== $this->classmap) {
-            $options['classmap'] = $this->getClassmap();
+            $options['classmap'] = $this->get_classmap();
         }
-
         if (null !== $this->typemap) {
-            $options['typemap'] = $this->getTypemap();
+            $options['typemap'] = $this->get_typemap();
         }
-
         if (null !== $this->encoding) {
-            $options['encoding'] = $this->getEncoding();
+            $options['encoding'] = $this->get_encoding();
         }
-
-        if (null !== $this->soapVersion) {
-            $options['soap_version'] = $this->getSoapVersion();
+        if (null !== $this->soap_version) {
+            $options['soap_version'] = $this->get_soap_version();
         }
-
         if (null !== $this->uri) {
-            $options['uri'] = $this->getUri();
+            $options['uri'] = $this->get_uri();
         }
-
         if (null !== $this->features) {
-            $options['features'] = $this->getSoapFeatures();
+            $options['features'] = $this->get_soap_features();
         }
-
-        if (null !== $this->wsdlCache) {
-            $options['cache_wsdl'] = $this->getWSDLCache();
+        if (null !== $this->wsdl_cache) {
+            $options['cache_wsdl'] = $this->get_wsdl_cache();
         }
-
-        if (null !== $this->sendErrors) {
-            $options['send_errors'] = $this->getSendErrors();
+        if (null !== $this->send_errors) {
+            $options['send_errors'] = $this->get_send_errors();
         }
-
-        if (null !== $this->parseHuge) {
-            $options['parse_huge'] = $this->getParseHuge();
+        if (null !== $this->parse_huge) {
+            $options['parse_huge'] = $this->get_parse_huge();
         }
-
         return $options;
     }
-
     /**
      * Set encoding
      *
      * @param  string $encoding
      * @throws InvalidArgumentException With invalid encoding argument.
      */
-    public function setEncoding($encoding): static
+    public function set_encoding($encoding): static
     {
-        if (! is_string($encoding)) {
+        if (!is_string($encoding)) {
             throw new InvalidArgumentException('Invalid encoding specified');
         }
-
         $this->encoding = $encoding;
         return $this;
     }
-
     /**
      * Get encoding
      *
      * @return string
      */
-    public function getEncoding()
+    public function get_encoding()
     {
         return $this->encoding;
     }
-
     /**
      * Set SOAP version
      *
      * @param  int $version One of the SOAP_1_1 or SOAP_1_2 constants
      * @throws InvalidArgumentException With invalid soap version argument.
      */
-    public function setSoapVersion($version): static
+    public function set_soap_version($version): static
     {
-        if (! in_array($version, [SOAP_1_1, SOAP_1_2])) {
+        if (!in_array($version, [SOAP_1_1, SOAP_1_2])) {
             throw new InvalidArgumentException('Invalid soap version specified');
         }
-
-        $this->soapVersion = $version;
+        $this->soap_version = $version;
         return $this;
     }
-
     /**
      * Get SOAP version
      *
      * @return int
      */
-    public function getSoapVersion()
+    public function get_soap_version()
     {
-        return $this->soapVersion;
+        return $this->soap_version;
     }
-
     /**
      * Check for valid URN
      *
@@ -452,16 +372,14 @@ class Server implements LaminasServerServer
      * @return true
      * @throws InvalidArgumentException On invalid URN.
      */
-    public function validateUrn($urn): bool
+    public function validate_urn($urn): bool
     {
         $scheme = parse_url($urn, PHP_URL_SCHEME);
         if ($scheme === false || $scheme === null) {
             throw new InvalidArgumentException('Invalid URN');
         }
-
         return true;
     }
-
     /**
      * Set actor
      *
@@ -469,23 +387,21 @@ class Server implements LaminasServerServer
      *
      * @param  string $actor
      */
-    public function setActor($actor): static
+    public function set_actor($actor): static
     {
-        $this->validateUrn($actor);
+        $this->validate_urn($actor);
         $this->actor = $actor;
         return $this;
     }
-
     /**
      * Retrieve actor
      *
      * @return string
      */
-    public function getActor()
+    public function get_actor()
     {
         return $this->actor;
     }
-
     /**
      * Set URI
      *
@@ -493,197 +409,175 @@ class Server implements LaminasServerServer
      *
      * @param  string $uri
      */
-    public function setUri($uri): static
+    public function set_uri($uri): static
     {
-        $this->validateUrn($uri);
+        $this->validate_urn($uri);
         $this->uri = $uri;
         return $this;
     }
-
     /**
      * Retrieve URI
      *
      * @return string
      */
-    public function getUri()
+    public function get_uri()
     {
         return $this->uri;
     }
-
     /**
      * Set classmap
      *
      * @param  array $classmap
      * @throws InvalidArgumentException For any invalid class in the class map.
      */
-    public function setClassmap($classmap): static
+    public function set_classmap($classmap): static
     {
-        if (! is_array($classmap)) {
+        if (!is_array($classmap)) {
             throw new InvalidArgumentException('Classmap must be an array');
         }
         foreach ($classmap as $class) {
-            if (! class_exists($class)) {
+            if (!class_exists($class)) {
                 throw new InvalidArgumentException('Invalid class in class map');
             }
         }
-
         $this->classmap = $classmap;
         return $this;
     }
-
     /**
      * Retrieve classmap
      *
      * @return mixed
      */
-    public function getClassmap()
+    public function get_classmap()
     {
         return $this->classmap;
     }
-
     /**
      * Set typemap with xml to php type mappings with appropriate validation.
      *
      * @param  array $typeMap
      * @throws InvalidArgumentException
      */
-    public function setTypemap($typeMap): static
+    public function set_typemap($type_map): static
     {
-        if (! is_array($typeMap)) {
+        if (!is_array($type_map)) {
             throw new InvalidArgumentException('Typemap must be an array');
         }
-
-        foreach ($typeMap as $type) {
-            if (! is_callable($type['from_xml'])) {
-                throw new InvalidArgumentException(sprintf(
-                    'Invalid from_xml callback for type: %s',
-                    $type['type_name']
-                ));
+        foreach ($type_map as $type) {
+            if (!is_callable($type['from_xml'])) {
+                throw new InvalidArgumentException(sprintf('Invalid from_xml callback for type: %s', $type['type_name']));
             }
-            if (! is_callable($type['to_xml'])) {
+            if (!is_callable($type['to_xml'])) {
                 throw new InvalidArgumentException('Invalid to_xml callback for type: ' . $type['type_name']);
             }
         }
-
-        $this->typemap = $typeMap;
+        $this->typemap = $type_map;
         return $this;
     }
-
     /**
      * Retrieve typemap
      *
      * @return array
      */
-    public function getTypemap()
+    public function get_typemap()
     {
         return $this->typemap;
     }
-
     /**
      * Set wsdl
      *
      * @param  string $wsdl  URI or path to a WSDL
      */
-    public function setWSDL($wsdl): static
+    public function set_wsdl($wsdl): static
     {
         $this->wsdl = $wsdl;
         return $this;
     }
-
     /**
      * Retrieve wsdl
      *
      * @return string
      */
-    public function getWSDL()
+    public function get_wsdl()
     {
         return $this->wsdl;
     }
-
     /**
      * Set the SOAP Feature options.
      *
      * @param  string|int $feature
      */
-    public function setSoapFeatures($feature): static
+    public function set_soap_features($feature): static
     {
         $this->features = $feature;
         return $this;
     }
-
     /**
      * Return current SOAP Features options
      *
      * @return int
      */
-    public function getSoapFeatures()
+    public function get_soap_features()
     {
         return $this->features;
     }
-
     /**
      * Set the SOAP WSDL Caching Options
      *
      * @param  string|int|bool $options
      */
-    public function setWSDLCache($options): static
+    public function set_wsdl_cache($options): static
     {
-        $this->wsdlCache = $options;
+        $this->wsdl_cache = $options;
         return $this;
     }
-
     /**
      * Get current SOAP WSDL Caching option
      *
      * @return null|string|int|bool
      */
-    public function getWSDLCache()
+    public function get_wsdl_cache()
     {
-        return $this->wsdlCache;
+        return $this->wsdl_cache;
     }
-
     /**
      * Set the SOAP send_errors Option
      *
      * @param  bool $sendErrors
      */
-    public function setSendErrors($sendErrors): static
+    public function set_send_errors($send_errors): static
     {
-        $this->sendErrors = (bool) $sendErrors;
+        $this->send_errors = (bool) $send_errors;
         return $this;
     }
-
     /**
      * Get current SOAP send_errors option
      *
      * @return bool
      */
-    public function getSendErrors()
+    public function get_send_errors()
     {
-        return $this->sendErrors;
+        return $this->send_errors;
     }
-
     /**
      * Set flag to allow DOMDocument->loadXML() to parse huge nodes
      *
      * @param  bool $parseHuge
      */
-    public function setParseHuge($parseHuge): static
+    public function set_parse_huge($parse_huge): static
     {
-        $this->parseHuge = (bool) $parseHuge;
+        $this->parse_huge = (bool) $parse_huge;
         return $this;
     }
-
     /**
      * Get flag to allow DOMDocument->loadXML() to parse huge nodes
      *
      * @return bool
      */
-    public function getParseHuge()
+    public function get_parse_huge()
     {
-        return $this->parseHuge;
+        return $this->parse_huge;
     }
-
     /**
      * Attach a function as a server method
      *
@@ -692,13 +586,12 @@ class Server implements LaminasServerServer
      * @param  string $namespace Ignored
      * @throws InvalidArgumentException On invalid functions.
      */
-    public function addFunction($function, $namespace = ''): static
+    public function add_function($function, $namespace = ''): static
     {
         // Bail early if set to SOAP_FUNCTIONS_ALL
         if ($this->functions === SOAP_FUNCTIONS_ALL) {
             return $this;
         }
-
         if (is_array($function)) {
             foreach ($function as $func) {
                 if (is_string($func) && function_exists($func)) {
@@ -714,14 +607,11 @@ class Server implements LaminasServerServer
         } else {
             throw new InvalidArgumentException('Invalid function specified');
         }
-
         if (is_array($this->functions)) {
             $this->functions = array_unique($this->functions);
         }
-
         return $this;
     }
-
     /**
      * Attach a class to a server
      *
@@ -737,41 +627,27 @@ class Server implements LaminasServerServer
      * @return self
      * @throws InvalidArgumentException If called more than once, or if class does not exist.
      */
-    public function setClass($class, $namespace = '', $argv = null)
+    public function set_class($class, $namespace = '', $argv = null)
     {
         if (isset($this->class)) {
-            throw new InvalidArgumentException(
-                'A class has already been registered with this soap server instance'
-            );
+            throw new InvalidArgumentException('A class has already been registered with this soap server instance');
         }
-
         if (is_object($class)) {
-            return $this->setObject($class);
+            return $this->set_object($class);
         }
-
-        if (! is_string($class)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid class argument (%s)',
-                gettype($class)
-            ));
+        if (!is_string($class)) {
+            throw new InvalidArgumentException(sprintf('Invalid class argument (%s)', gettype($class)));
         }
-
-        if (! class_exists($class)) {
-            throw new InvalidArgumentException(sprintf(
-                'Class "%s" does not exist',
-                $class
-            ));
+        if (!class_exists($class)) {
+            throw new InvalidArgumentException(sprintf('Class "%s" does not exist', $class));
         }
-
         $this->class = $class;
         if (2 < func_num_args()) {
-            $argv            = func_get_args();
-            $this->classArgs = array_slice($argv, 2);
+            $argv = func_get_args();
+            $this->class_args = array_slice($argv, 2);
         }
-
         return $this;
     }
-
     /**
      * Attach an object to a server
      *
@@ -780,25 +656,17 @@ class Server implements LaminasServerServer
      * @param  object $object
      * @throws InvalidArgumentException
      */
-    public function setObject($object): static
+    public function set_object($object): static
     {
-        if (! is_object($object)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid object argument (%s)',
-                gettype($object)
-            ));
+        if (!is_object($object)) {
+            throw new InvalidArgumentException(sprintf('Invalid object argument (%s)', gettype($object)));
         }
-
         if (isset($this->object)) {
-            throw new InvalidArgumentException(
-                'An object has already been registered with this soap server instance'
-            );
+            throw new InvalidArgumentException('An object has already been registered with this soap server instance');
         }
-
         $this->object = $object;
         return $this;
     }
-
     /**
      * Return a server definition array
      *
@@ -806,7 +674,7 @@ class Server implements LaminasServerServer
      * merged with all public methods of the class set with {@link setClass()}
      * (if any).
      */
-    public function getFunctions(): array
+    public function get_functions(): array
     {
         $functions = [];
         if (null !== $this->class) {
@@ -814,47 +682,41 @@ class Server implements LaminasServerServer
         } elseif (null !== $this->object) {
             $functions = get_class_methods($this->object);
         }
-
         return array_merge((array) $this->functions, $functions);
     }
-
     /**
      * Unimplemented: Load server definition
      *
      * @param  array $definition
      * @throws RuntimeException Unimplemented.
      */
-    public function loadFunctions($definition): never
+    public function load_functions($definition): never
     {
         throw new RuntimeException('Unimplemented method.');
     }
-
     /**
      * Set server persistence
      *
      * @param  int $mode SOAP_PERSISTENCE_SESSION or SOAP_PERSISTENCE_REQUEST constants
      * @throws InvalidArgumentException
      */
-    public function setPersistence($mode): static
+    public function set_persistence($mode): static
     {
-        if (! in_array($mode, [SOAP_PERSISTENCE_SESSION, SOAP_PERSISTENCE_REQUEST])) {
+        if (!in_array($mode, [SOAP_PERSISTENCE_SESSION, SOAP_PERSISTENCE_REQUEST])) {
             throw new InvalidArgumentException('Invalid persistence mode specified');
         }
-
         $this->persistence = $mode;
         return $this;
     }
-
     /**
      * Get server persistence
      *
      * @return int
      */
-    public function getPersistence()
+    public function get_persistence()
     {
         return $this->persistence;
     }
-
     /**
      * Set request
      *
@@ -868,16 +730,15 @@ class Server implements LaminasServerServer
      * @param DOMDocument|DOMNode|SimpleXMLElement|stdClass|string $request
      * @throws InvalidArgumentException
      */
-    protected function setRequest($request): static
+    protected function set_request($request): static
     {
         $xml = null;
-
-        if ($request instanceof DOMDocument) {
-            $xml = $request->saveXML();
-        } elseif ($request instanceof DOMNode) {
-            $xml = $request->ownerDocument->saveXML();
-        } elseif ($request instanceof SimpleXMLElement) {
-            $xml = $request->asXML();
+        if ($request instanceof Dom_Document) {
+            $xml = $request->save_xml();
+        } elseif ($request instanceof Dom_Node) {
+            $xml = $request->owner_document->save_xml();
+        } elseif ($request instanceof Simple_Xml_Element) {
+            $xml = $request->as_xml();
         } elseif (is_object($request) || is_string($request)) {
             if (is_object($request)) {
                 $xml = $request->__toString();
@@ -885,49 +746,39 @@ class Server implements LaminasServerServer
                 $xml = $request;
             }
             $xml = trim($xml);
-
             if (strlen($xml) === 0) {
                 throw new InvalidArgumentException('Empty request');
             }
-
-            $loadEntities = $this->disableEntityLoader(true);
-
-            $dom = new DOMDocument();
-
-            if (true === $this->getParseHuge()) {
-                $loadStatus = $dom->loadXML($xml, LIBXML_PARSEHUGE);
+            $load_entities = $this->disable_entity_loader(true);
+            $dom = new Dom_Document();
+            if (true === $this->get_parse_huge()) {
+                $load_status = $dom->load_xml($xml, LIBXML_PARSEHUGE);
             } else {
-                $loadStatus = $dom->loadXML($xml);
+                $load_status = $dom->load_xml($xml);
             }
-
-            $this->disableEntityLoader($loadEntities);
-
+            $this->disable_entity_loader($load_entities);
             // @todo check libxml errors ? validate document ?
-            if (! $loadStatus) {
+            if (!$load_status) {
                 throw new InvalidArgumentException('Invalid XML');
             }
-
-            foreach ($dom->childNodes as $child) {
-                if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+            foreach ($dom->child_nodes as $child) {
+                if ($child->node_type === XML_DOCUMENT_TYPE_NODE) {
                     throw new InvalidArgumentException('Invalid XML: Detected use of illegal DOCTYPE');
                 }
             }
         }
-
         $this->request = $xml;
         return $this;
     }
-
     /**
      * Retrieve request XML
      *
      * @return string
      */
-    public function getLastRequest()
+    public function get_last_request()
     {
         return $this->request;
     }
-
     /**
      * Set return response flag
      *
@@ -938,32 +789,29 @@ class Server implements LaminasServerServer
      *
      * @param  bool $flag
      */
-    public function setReturnResponse($flag = true): static
+    public function set_return_response($flag = true): static
     {
-        $this->returnResponse = (bool) $flag;
+        $this->return_response = (bool) $flag;
         return $this;
     }
-
     /**
      * Retrieve return response flag
      *
      * @return bool
      */
-    public function getReturnResponse()
+    public function get_return_response()
     {
-        return $this->returnResponse;
+        return $this->return_response;
     }
-
     /**
      * Get response XML
      *
      * @return string
      */
-    public function getResponse()
+    public function get_response()
     {
         return $this->response;
     }
-
     /**
      * Get SoapServer object
      *
@@ -973,49 +821,41 @@ class Server implements LaminasServerServer
      *
      * @return SoapServer
      */
-    public function getSoap()
+    public function get_soap()
     {
-        if ($this->server instanceof SoapServer) {
+        if ($this->server instanceof Soap_Server) {
             return $this->server;
         }
-
-        $options = $this->getOptions();
-        $server  = new SoapServer($this->wsdl, $options);
-
-        if (! empty($this->functions)) {
-            $server->addFunction($this->functions);
+        $options = $this->get_options();
+        $server = new Soap_Server($this->wsdl, $options);
+        if (!empty($this->functions)) {
+            $server->add_function($this->functions);
         }
-
-        if (! empty($this->class)) {
-            $args = $this->classArgs;
+        if (!empty($this->class)) {
+            $args = $this->class_args;
             array_unshift($args, $this->class);
-            call_user_func_array($server->setClass(...), $args);
+            call_user_func_array($server->set_class(...), $args);
         }
-
-        if (! empty($this->object)) {
-            $server->setObject($this->object);
+        if (!empty($this->object)) {
+            $server->set_object($this->object);
         }
-
         if (null !== $this->persistence) {
-            $server->setPersistence($this->persistence);
+            $server->set_persistence($this->persistence);
         }
-
         $this->server = $server;
         return $this->server;
     }
-
     /**
-     * Proxy for _getSoap method
-     *
-     * @see _getSoap
-     *
-     * @return SoapServer the soapServer instance
-    public function getSoap()
-    {
-        return $this->_getSoap();
-    }
-     */
-
+    * Proxy for _getSoap method
+    *
+    * @see _getSoap
+    *
+    * @return SoapServer the soapServer instance
+        public function getSoap()
+        {
+       return $this->_getSoap();
+        }
+    */
     /**
      * Handle a request
      *
@@ -1040,25 +880,20 @@ class Server implements LaminasServerServer
         if (null === $request) {
             $request = file_get_contents('php://input');
         }
-
         // Set Server error handler
-        $displayErrorsOriginalState = $this->initializeSoapErrorContext();
-
-        $setRequestException = null;
+        $display_errors_original_state = $this->initialize_soap_error_context();
+        $set_request_exception = null;
         try {
-            $this->setRequest($request);
+            $this->set_request($request);
         } catch (Exception $e) {
-            $setRequestException = $e;
+            $set_request_exception = $e;
         }
-
-        $soap = $this->getSoap();
-
-        $fault          = false;
+        $soap = $this->get_soap();
+        $fault = false;
         $this->response = '';
-
-        if ($setRequestException instanceof Exception) {
+        if ($set_request_exception instanceof Exception) {
             // Create SOAP fault message if we've caught a request exception
-            $fault = $this->fault($setRequestException->getMessage(), 'Sender');
+            $fault = $this->fault($set_request_exception->get_message(), 'Sender');
         } else {
             ob_start();
             try {
@@ -1068,143 +903,117 @@ class Server implements LaminasServerServer
             }
             $this->response = ob_get_clean();
         }
-
         // Restore original error handler
         restore_error_handler();
-        ini_set('display_errors', (string) $displayErrorsOriginalState);
-
+        ini_set('display_errors', (string) $display_errors_original_state);
         // Send a fault, if we have one
-        if ($fault instanceof SoapFault && ! $this->returnResponse) {
-            $soap->fault($fault->faultcode, $fault->getMessage());
-
+        if ($fault instanceof Soap_Fault && !$this->return_response) {
+            $soap->fault($fault->faultcode, $fault->get_message());
             return;
         }
-
         // Echo the response, if we're not returning it
-        if (! $this->returnResponse) {
+        if (!$this->return_response) {
             echo $this->response;
-
             return;
         }
-
         // Return a fault, if we have it
-        if ($fault instanceof SoapFault) {
+        if ($fault instanceof Soap_Fault) {
             return $fault;
         }
-
         // Return the response
         return $this->response;
     }
-
     /**
      * Method initializes the error context that the SOAPServer environment will run in.
      *
      * @return bool display_errors original value
      */
-    protected function initializeSoapErrorContext(): string|false
+    protected function initialize_soap_error_context(): string|false
     {
-        $displayErrorsOriginalState = ini_get('display_errors');
+        $display_errors_original_state = ini_get('display_errors');
         ini_set('display_errors', '0');
-        set_error_handler($this->handlePhpErrors(...), E_USER_ERROR);
-        return $displayErrorsOriginalState;
+        set_error_handler($this->handle_php_errors(...), E_USER_ERROR);
+        return $display_errors_original_state;
     }
-
     /**
      * Set the debug mode.
      * In debug mode, all exceptions are send to the client.
      *
      * @param  bool $debug
      */
-    public function setDebugMode($debug): static
+    public function set_debug_mode($debug): static
     {
         $this->debug = $debug;
         return $this;
     }
-
     /**
      * Validate and register fault exception
      *
      * @param  string|array $class Exception class or array of exception classes
      * @throws InvalidArgumentException
      */
-    public function registerFaultException($class): static
+    public function register_fault_exception($class): static
     {
         if (is_array($class)) {
             foreach ($class as $row) {
-                $this->registerFaultException($row);
+                $this->register_fault_exception($row);
             }
-        } elseif (
-            is_string($class)
-            && class_exists($class)
-            && (is_subclass_of($class, 'Exception') || 'Exception' === $class)
-        ) {
+        } elseif (is_string($class) && class_exists($class) && (is_subclass_of($class, 'Exception') || 'Exception' === $class)) {
             $ref = new ReflectionClass($class);
-
-            $this->faultExceptions[] = $ref->getName();
-            $this->faultExceptions   = array_unique($this->faultExceptions);
+            $this->fault_exceptions[] = $ref->get_name();
+            $this->fault_exceptions = array_unique($this->fault_exceptions);
         } else {
-            throw new InvalidArgumentException(
-                'Argument for Laminas\Soap\Server::registerFaultException should be'
-                . ' string or array of strings with valid exception names'
-            );
+            throw new InvalidArgumentException('Argument for Laminas\Soap\Server::registerFaultException should be' . ' string or array of strings with valid exception names');
         }
-
         return $this;
     }
-
     /**
      * Checks if provided fault name is registered as valid in this server.
      *
      * @param string $fault Name of a fault class
      * @return bool
      */
-    public function isRegisteredAsFaultException($fault)
+    public function is_registered_as_fault_exception($fault)
     {
         if ($this->debug) {
             return true;
         }
-
-        $ref        = new ReflectionClass($fault);
-        $classNames = $ref->getName();
-        return in_array($classNames, $this->faultExceptions);
+        $ref = new ReflectionClass($fault);
+        $class_names = $ref->get_name();
+        return in_array($class_names, $this->fault_exceptions);
     }
-
     /**
      * Deregister a fault exception from the fault exception stack
      *
      * @param  string $class
      */
-    public function deregisterFaultException($class): bool
+    public function deregister_fault_exception($class): bool
     {
-        if (in_array($class, $this->faultExceptions, true)) {
-            $index = array_search($class, $this->faultExceptions);
-            unset($this->faultExceptions[$index]);
+        if (in_array($class, $this->fault_exceptions, true)) {
+            $index = array_search($class, $this->fault_exceptions);
+            unset($this->fault_exceptions[$index]);
             return true;
         }
-
         return false;
     }
-
     /**
      * Return fault exceptions list
      *
      * @return array
      */
-    public function getFaultExceptions()
+    public function get_fault_exceptions()
     {
-        return $this->faultExceptions;
+        return $this->fault_exceptions;
     }
-
     /**
      * Return caught exception during business code execution
      *
      * @return null|Exception caught exception
      */
-    public function getException()
+    public function get_exception()
     {
-        return $this->caughtException;
+        return $this->caught_exception;
     }
-
     /**
      * Generate a server fault
      *
@@ -1219,15 +1028,14 @@ class Server implements LaminasServerServer
      * @param string|Exception $fault
      * @param  string $code SOAP Fault Codes
      */
-    public function fault($fault = null, $code = 'Receiver'): \SoapFault
+    public function fault($fault = null, $code = 'Receiver'): \Soap_Fault
     {
-        $this->caughtException = is_string($fault) ? new Exception($fault) : $fault;
-
+        $this->caught_exception = is_string($fault) ? new Exception($fault) : $fault;
         if ($fault instanceof Exception) {
-            if ($this->isRegisteredAsFaultException($fault)) {
-                $message = $fault->getMessage();
-                $eCode   = $fault->getCode();
-                $code    = empty($eCode) ? $code : $eCode;
+            if ($this->is_registered_as_fault_exception($fault)) {
+                $message = $fault->get_message();
+                $e_code = $fault->get_code();
+                $code = empty($e_code) ? $code : $e_code;
             } else {
                 $message = 'Unknown error';
             }
@@ -1236,22 +1044,12 @@ class Server implements LaminasServerServer
         } else {
             $message = 'Unknown error';
         }
-
-        $allowedFaultModes = [
-            'VersionMismatch',
-            'MustUnderstand',
-            'DataEncodingUnknown',
-            'Sender',
-            'Receiver',
-            'Server',
-        ];
-        if (! in_array($code, $allowedFaultModes)) {
+        $allowed_fault_modes = ['VersionMismatch', 'MustUnderstand', 'DataEncodingUnknown', 'Sender', 'Receiver', 'Server'];
+        if (!in_array($code, $allowed_fault_modes)) {
             $code = 'Receiver';
         }
-
-        return new SoapFault($code, $message);
+        return new Soap_Fault($code, $message);
     }
-
     /**
      * Throw PHP errors as SoapFaults
      *
@@ -1259,11 +1057,10 @@ class Server implements LaminasServerServer
      * @param  string $errstr
      * @throws SoapFault
      */
-    public function handlePhpErrors($errno, $errstr): never
+    public function handle_php_errors($errno, $errstr): never
     {
         throw $this->fault($errstr, 'Receiver');
     }
-
     /**
      * Disable the ability to load external XML entities based on libxml version
      *
@@ -1275,7 +1072,7 @@ class Server implements LaminasServerServer
      * @param bool $flag
      * @return bool
      */
-    private function disableEntityLoader($flag = true)
+    private function disable_entity_loader($flag = true)
     {
         if (LIBXML_VERSION < 20900) {
             return libxml_disable_entity_loader($flag);

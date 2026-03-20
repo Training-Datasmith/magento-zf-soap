@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Soap\Exception;
 
 use RuntimeException;
-
 /**
  * Exception thrown when SOAP PHP extension is not loaded
  */
-class ExtensionNotLoadedException extends RuntimeException
+class Extension_Not_Loaded_Exception extends RuntimeException
 {
 }

@@ -1,19 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laminas\Soap\Server;
 
 use function call_user_func_array;
 use function count;
-
 use function get_object_vars;
-
 use Laminas\Soap\Exception;
-use ReflectionObject;
-
+use Reflection_Object;
 use function sprintf;
-
 /**
  * Wraps WSDL Document/Literal Style service objects to hide SOAP request
  * message abstraction from the actual service object.
@@ -76,10 +71,9 @@ use function sprintf;
  *  $soap->handle();
  * </code>
  */
-class DocumentLiteralWrapper
+class Document_Literal_Wrapper
 {
-    protected \ReflectionObject $reflection;
-
+    protected \Reflection_Object $reflection;
     /**
      * Pass Service object to the constructor
      *
@@ -87,9 +81,8 @@ class DocumentLiteralWrapper
      */
     public function __construct(protected $object)
     {
-        $this->reflection = new ReflectionObject($this->object);
+        $this->reflection = new Reflection_Object($this->object);
     }
-
     /**
      * Proxy method that does the heavy document/literal decomposing.
      *
@@ -98,14 +91,12 @@ class DocumentLiteralWrapper
      */
     public function __call(string $method, array $args)
     {
-        $this->assertOnlyOneArgument($args);
-        $this->assertServiceDelegateHasMethod($method);
-
-        $delegateArgs = $this->parseArguments($method, $args[0]);
-        $ret          = call_user_func_array([$this->object, $method], $delegateArgs);
-        return $this->getResultMessage($method, $ret);
+        $this->assert_only_one_argument($args);
+        $this->assert_service_delegate_has_method($method);
+        $delegate_args = $this->parse_arguments($method, $args[0]);
+        $ret = call_user_func_array([$this->object, $method], $delegate_args);
+        return $this->get_result_message($method, $ret);
     }
-
     /**
      * Parse the document/literal wrapper into arguments to call the real
      * service.
@@ -114,65 +105,48 @@ class DocumentLiteralWrapper
      * @param  object $document
      * @throws Exception\UnexpectedValueException
      */
-    protected function parseArguments($method, $document): array
+    protected function parse_arguments($method, $document): array
     {
-        $reflMethod = $this->reflection->getMethod($method);
-        $params     = [];
-        foreach ($reflMethod->getParameters() as $param) {
-            $params[$param->getName()] = $param;
+        $refl_method = $this->reflection->get_method($method);
+        $params = [];
+        foreach ($refl_method->get_parameters() as $param) {
+            $params[$param->get_name()] = $param;
         }
-
-        $delegateArgs = [];
-        foreach (get_object_vars($document) as $argName => $argValue) {
-            if (! isset($params[$argName])) {
-                throw new Exception\UnexpectedValueException(sprintf(
-                    'Received unknown argument %s which is not an argument to %s::%s',
-                    $argName,
-                    $this->object::class,
-                    $method
-                ));
+        $delegate_args = [];
+        foreach (get_object_vars($document) as $arg_name => $arg_value) {
+            if (!isset($params[$arg_name])) {
+                throw new Exception\UnexpectedValueException(sprintf('Received unknown argument %s which is not an argument to %s::%s', $arg_name, $this->object::class, $method));
             }
-            $delegateArgs[$params[$argName]->getPosition()] = $argValue;
+            $delegate_args[$params[$arg_name]->get_position()] = $arg_value;
         }
-
-        return $delegateArgs;
+        return $delegate_args;
     }
-
     /**
      * Returns result message content
      *
      * @param  mixed $ret
      */
-    protected function getResultMessage(string $method, $ret): array
+    protected function get_result_message(string $method, $ret): array
     {
         return [$method . 'Result' => $ret];
     }
-
     /**
      * @param  string $method
      * @throws Exception\BadMethodCallException
      */
-    protected function assertServiceDelegateHasMethod($method)
+    protected function assert_service_delegate_has_method($method)
     {
-        if (! $this->reflection->hasMethod($method)) {
-            throw new Exception\BadMethodCallException(sprintf(
-                'Method %s does not exist on delegate object %s',
-                $method,
-                $this->object::class
-            ));
+        if (!$this->reflection->has_method($method)) {
+            throw new Exception\BadMethodCallException(sprintf('Method %s does not exist on delegate object %s', $method, $this->object::class));
         }
     }
-
     /**
      * @throws Exception\UnexpectedValueException
      */
-    protected function assertOnlyOneArgument(array $args)
+    protected function assert_only_one_argument(array $args)
     {
         if (count($args) !== 1) {
-            throw new Exception\UnexpectedValueException(sprintf(
-                'Expecting exactly one argument that is the document/literal wrapper, got %d',
-                count($args)
-            ));
+            throw new Exception\UnexpectedValueException(sprintf('Expecting exactly one argument that is the document/literal wrapper, got %d', count($args)));
         }
     }
 }
