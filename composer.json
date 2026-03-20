@@ -44,7 +44,7 @@
         "amphp/socket": "^2.3.1"
     },
     "replace": {
-      "laminas/laminas-soap": "^2.14"
+        "laminas/laminas-soap": "^2.14"
     },
     "suggest": {
         "ext-curl": "Curl is required when .NET compatibility is required",
@@ -57,7 +57,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "LaminasTest\\Soap\\": "test/"
+            "Laminas_Test\\Soap\\": "test/"
         },
         "files": [
             "test/TestAsset/commontypes.php",
